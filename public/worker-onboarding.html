@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Aetheric — Worker Onboarding</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary":"#121E31","primary-container":"#CEDAF4","on-primary":"#F8F8FF","surface":"#F8F9FC","surface-variant":"#DEE3E9","on-surface":"#2D3338","on-surface-variant":"#5A6065","outline-variant":"#ADB3B8" },
+          fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"],"label":["Manrope","sans-serif"] },
+          borderRadius: { "DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .aether-glass { background:rgba(255,255,255,0.4); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.6); box-shadow:0 8px 32px 0 rgba(18,30,49,0.05); }
+    .skill-chip-selected { background:linear-gradient(135deg,#121E31 0%,#2A3B52 100%); box-shadow:0 4px 15px rgba(18,30,49,0.25),inset 0 1px 1px rgba(255,255,255,0.2); }
+    .skill-chip-unselected { background:rgba(255,255,255,0.15); backdrop-filter:blur(12px); border:1px solid rgba(18,30,49,0.08); }
+    .mesh-bg { background-color:#f8f9fc; background-image:radial-gradient(at 0% 0%,hsla(217,100%,95%,1) 0,transparent 50%),radial-gradient(at 50% 0%,hsla(225,39%,90%,1) 0,transparent 50%),radial-gradient(at 100% 0%,hsla(217,100%,95%,1) 0,transparent 50%); overflow-x: hidden; }
+    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body class="mesh-bg text-on-surface font-body min-h-screen flex flex-col">
+
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-white/40 backdrop-blur-xl border-b border-white/40">
+  <div class="flex items-center gap-3">
+    <button class="p-2 rounded-xl bg-white/60" onclick="window.location.href='/worker'">
+      <span class="material-symbols-outlined text-primary scale-90">arrow_back</span>
+    </button>
+    <span class="font-headline font-extrabold text-primary tracking-tight text-xl">Aetheric</span>
+  </div>
+  <div class="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-primary/20 to-transparent">
+    <div class="w-full h-full rounded-full overflow-hidden border-2 border-white bg-primary/10 flex items-center justify-center">
+      <span class="material-symbols-outlined text-primary">person</span>
+    </div>
+  </div>
+</header>
+
+<main class="flex-grow pt-28 pb-36 px-6 max-w-2xl mx-auto w-full relative">
+  <!-- Header -->
+  <section class="mb-10 text-center md:text-left">
+    <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/5 border border-primary/10 mb-4">
+      <span id="step-label" class="text-primary font-bold tracking-widest text-[10px] uppercase">Step 1 of 3</span>
+    </div>
+    <h1 id="step-title" class="font-headline font-extrabold text-4xl text-primary tracking-tight leading-tight mb-4">
+      Tell us about yourself
+    </h1>
+    <p id="step-desc" class="text-on-surface-variant text-lg leading-relaxed max-w-md">
+      Fill in your basic details to get started as an Aetheric service professional.
+    </p>
+  </section>
+
+  <!-- Step 1: Basic Info -->
+  <section id="step-1" class="aether-glass rounded-[2.5rem] p-6 mb-8 fade-in">
+    <div class="space-y-6">
+      <div>
+        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Full Name</label>
+        <input id="reg-name" type="text" placeholder="Your name" 
+          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Phone Number</label>
+        <input id="reg-phone" type="tel" placeholder="+91 XXXXX XXXXX" 
+          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Location</label>
+        <input id="reg-location" type="text" placeholder="Your area/city" 
+          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
+      </div>
+      <div>
+        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Hourly Rate (₹)</label>
+        <input id="reg-rate" type="number" placeholder="500" 
+          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 2: Skills (hidden initially) -->
+  <section id="step-2" class="aether-glass rounded-[2.5rem] p-6 mb-8" style="display:none;">
+    <div class="grid grid-cols-2 gap-3" id="skills-grid">
+      <!-- Skills will be rendered by JS -->
+    </div>
+  </section>
+
+  <!-- Step 3: Bio (hidden initially) -->
+  <section id="step-3" class="aether-glass rounded-[2.5rem] p-6 mb-8" style="display:none;">
+    <div>
+      <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">About You</label>
+      <textarea id="reg-bio" rows="4" placeholder="Tell customers about your experience and specialties..."
+        class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30 resize-none"></textarea>
+    </div>
+    <div class="mt-6">
+      <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Years of Experience</label>
+      <input id="reg-experience" type="text" placeholder="e.g. 5 years"
+        class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
+    </div>
+  </section>
+
+  <!-- Success (hidden) -->
+  <section id="step-success" class="text-center" style="display:none;">
+    <div class="text-6xl mb-6">🎉</div>
+    <h2 class="font-headline font-extrabold text-3xl text-primary mb-4">Welcome Aboard!</h2>
+    <p class="text-on-surface-variant text-lg mb-8">Your profile is live. Start accepting bookings now.</p>
+    <button onclick="window.location.href='/worker'" class="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-xl">
+      Go to Dashboard →
+    </button>
+  </section>
+
+  <!-- Info Cards -->
+  <section id="info-cards" class="space-y-4">
+    <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
+          <span class="material-symbols-outlined text-primary">trending_up</span>
+        </div>
+        <div>
+          <h3 class="font-label font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Market Velocity</h3>
+          <p class="text-sm text-primary/90 font-medium leading-relaxed">
+            Electricians are seeing a <span class="text-primary font-bold">+24% surge</span> in premium local requests this month.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
+          <span class="material-symbols-outlined text-primary">verified_user</span>
+        </div>
+        <div>
+          <h3 class="font-label font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Impact Factor</h3>
+          <p class="text-sm text-primary/90 font-medium leading-relaxed">
+            Profiles with verified expertise see <span class="text-primary font-bold">3.2x higher</span> conversion rates.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full p-6 z-50">
+  <div class="max-w-2xl mx-auto flex items-center gap-4 aether-glass p-3 rounded-full shadow-2xl">
+    <button id="prev-btn" onclick="prevStep()" class="flex-1 px-4 py-4 text-primary/60 font-bold hover:text-primary transition-colors text-sm" style="visibility:hidden;">
+      Previous
+    </button>
+    <button id="next-btn" onclick="nextStep()" class="flex-[2] px-8 py-4 bg-primary text-white rounded-full font-bold shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 text-sm tracking-wide">
+      Continue
+    </button>
+  </div>
+</footer>
+
+<script>
+  const API_BASE = window.location.origin;
+  let currentStep = 1;
+  const selectedSkills = new Set();
+
+  const allSkills = [
+    { id: 'electrician', name: 'Electrician', icon: 'electric_bolt' },
+    { id: 'plumber', name: 'Plumber', icon: 'plumbing' },
+    { id: 'tutor', name: 'Tutor', icon: 'school' },
+    { id: 'carpenter', name: 'Carpenter', icon: 'carpenter' },
+    { id: 'gardener', name: 'Gardener', icon: 'potted_plant' },
+    { id: 'graphic_design', name: 'Graphic Design', icon: 'palette' },
+    { id: 'painter', name: 'Painter', icon: 'format_paint' },
+    { id: 'cleaner', name: 'Cleaner', icon: 'cleaning_services' },
+  ];
+
+  function renderSkills() {
+    const grid = document.getElementById('skills-grid');
+    grid.innerHTML = allSkills.map(s => `
+      <button onclick="toggleSkill('${s.id}')" id="skill-${s.id}" 
+        class="${selectedSkills.has(s.id) ? 'skill-chip-selected text-white' : 'skill-chip-unselected text-primary/80 hover:bg-white/60'} flex items-center gap-3 px-5 py-4 rounded-2xl transition-all active:scale-95">
+        <span class="material-symbols-outlined text-[20px] ${selectedSkills.has(s.id) ? 'text-primary-container' : 'text-primary/40'}">${s.icon}</span>
+        <span class="font-label font-${selectedSkills.has(s.id) ? 'bold' : 'semibold'} text-sm">${s.name}</span>
+      </button>
+    `).join('') + `
+      <button class="col-span-2 flex items-center justify-center gap-2 px-5 py-4 rounded-2xl bg-white/30 border border-dashed border-primary/20 text-primary/60">
+        <span class="material-symbols-outlined text-[20px]">add</span>
+        <span class="font-label font-bold text-sm">More coming soon</span>
+      </button>
+    `;
+  }
+
+  function toggleSkill(id) {
+    if (selectedSkills.has(id)) selectedSkills.delete(id);
+    else selectedSkills.add(id);
+    renderSkills();
+  }
+
+  function nextStep() {
+    if (currentStep === 1) {
+      const name = document.getElementById('reg-name').value.trim();
+      if (!name) { alert('Please enter your name'); return; }
+      currentStep = 2;
+      document.getElementById('step-1').style.display = 'none';
+      document.getElementById('step-2').style.display = 'block';
+      document.getElementById('step-2').classList.add('fade-in');
+      document.getElementById('step-label').textContent = 'Step 2 of 3';
+      document.getElementById('step-title').textContent = 'Customize your expertise';
+      document.getElementById('step-desc').textContent = "Choose the skills that define your craft. We'll use these to curate high-value opportunities.";
+      document.getElementById('prev-btn').style.visibility = 'visible';
+      renderSkills();
+    } else if (currentStep === 2) {
+      if (selectedSkills.size === 0) { alert('Please select at least one skill'); return; }
+      currentStep = 3;
+      document.getElementById('step-2').style.display = 'none';
+      document.getElementById('step-3').style.display = 'block';
+      document.getElementById('step-3').classList.add('fade-in');
+      document.getElementById('step-label').textContent = 'Step 3 of 3';
+      document.getElementById('step-title').textContent = 'Final touches';
+      document.getElementById('step-desc').textContent = 'Tell customers why they should hire you.';
+      document.getElementById('next-btn').textContent = 'Get Started';
+    } else if (currentStep === 3) {
+      submitRegistration();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep === 2) {
+      currentStep = 1;
+      document.getElementById('step-2').style.display = 'none';
+      document.getElementById('step-1').style.display = 'block';
+      document.getElementById('step-label').textContent = 'Step 1 of 3';
+      document.getElementById('step-title').textContent = 'Tell us about yourself';
+      document.getElementById('step-desc').textContent = 'Fill in your basic details to get started as an Aetheric service professional.';
+      document.getElementById('prev-btn').style.visibility = 'hidden';
+    } else if (currentStep === 3) {
+      currentStep = 2;
+      document.getElementById('step-3').style.display = 'none';
+      document.getElementById('step-2').style.display = 'block';
+      document.getElementById('step-label').textContent = 'Step 2 of 3';
+      document.getElementById('step-title').textContent = 'Customize your expertise';
+      document.getElementById('step-desc').textContent = "Choose the skills that define your craft.";
+      document.getElementById('next-btn').textContent = 'Continue';
+    }
+  }
+
+  async function submitRegistration() {
+    const name = document.getElementById('reg-name').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const location = document.getElementById('reg-location').value.trim();
+    const rate = parseInt(document.getElementById('reg-rate').value) || 500;
+    const bio = document.getElementById('reg-bio').value.trim();
+    const experience = document.getElementById('reg-experience').value.trim();
+    const skills = Array.from(selectedSkills).map(s => allSkills.find(a => a.id === s)?.name || s);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/worker/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, skills, experience, hourlyRate: rate, bio, phone, location })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('aetheric_worker_id', data.worker.id);
+        localStorage.setItem('aetheric_worker_name', name);
+        localStorage.setItem('aetheric_worker_skills', JSON.stringify(skills));
+
+        // Show success
+        document.getElementById('step-3').style.display = 'none';
+        document.getElementById('info-cards').style.display = 'none';
+        document.getElementById('step-success').style.display = 'block';
+        document.getElementById('step-success').classList.add('fade-in');
+        document.querySelector('footer').style.display = 'none';
+        document.getElementById('step-label').textContent = 'Complete';
+        document.getElementById('step-title').textContent = '';
+        document.getElementById('step-desc').textContent = '';
+      }
+    } catch (err) {
+      alert('Registration failed. Please try again.');
+    }
+  }
+</script>
+<script src="/particles.js"></script>
+</body>
+</html>

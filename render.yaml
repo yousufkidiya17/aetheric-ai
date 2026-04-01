@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: aetheric-ai
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production
