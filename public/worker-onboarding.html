@@ -1,157 +1,179 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Aetheric — Worker Onboarding</title>
+  <meta name="description" content="Join Aetheric as a service professional. Register your skills and start earning."/>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
-          colors: { "primary":"#121E31","primary-container":"#CEDAF4","on-primary":"#F8F8FF","surface":"#F8F9FC","surface-variant":"#DEE3E9","on-surface":"#2D3338","on-surface-variant":"#5A6065","outline-variant":"#ADB3B8" },
-          fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"],"label":["Manrope","sans-serif"] },
-          borderRadius: { "DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px" },
+          colors: { "primary":"#121E31","accent":"#6366f1","surface":"#F8F9FC" },
+          fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"] },
         },
       },
     }
   </script>
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    .aether-glass { background:rgba(255,255,255,0.4); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.6); box-shadow:0 8px 32px 0 rgba(18,30,49,0.05); }
-    .skill-chip-selected { background:linear-gradient(135deg,#121E31 0%,#2A3B52 100%); box-shadow:0 4px 15px rgba(18,30,49,0.25),inset 0 1px 1px rgba(255,255,255,0.2); }
-    .skill-chip-unselected { background:rgba(255,255,255,0.15); backdrop-filter:blur(12px); border:1px solid rgba(18,30,49,0.08); }
-    .mesh-bg { background-color:#f8f9fc; background-image:radial-gradient(at 0% 0%,hsla(217,100%,95%,1) 0,transparent 50%),radial-gradient(at 50% 0%,hsla(225,39%,90%,1) 0,transparent 50%),radial-gradient(at 100% 0%,hsla(217,100%,95%,1) 0,transparent 50%); overflow-x: hidden; }
-    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .fade-in { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    .glass-card { background:rgba(255,255,255,0.4);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.6);box-shadow:0 8px 32px 0 rgba(18,30,49,0.05); }
+    .skill-selected { background:linear-gradient(135deg,#121E31 0%,#2A3B52 100%);box-shadow:0 4px 15px rgba(18,30,49,0.25),inset 0 1px 1px rgba(255,255,255,0.2); }
+    .skill-unselected { background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);border:1px solid rgba(18,30,49,0.08); }
+    body { background-color:#f8f9fc;background-image:radial-gradient(at 0% 0%,hsla(217,100%,95%,1) 0,transparent 50%),radial-gradient(at 50% 0%,hsla(225,39%,90%,1) 0,transparent 50%),radial-gradient(at 100% 0%,hsla(217,100%,95%,1) 0,transparent 50%);min-height:100vh;overflow-x:hidden; }
+    #particle-canvas { position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none; }
+    .fade-in { animation:fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
-<body class="mesh-bg text-on-surface font-body min-h-screen flex flex-col">
+<body class="font-body text-primary min-h-screen">
 
-<!-- Top Navigation -->
-<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-white/40 backdrop-blur-xl border-b border-white/40">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-20 bg-white/40 backdrop-blur-xl border-b border-white/40">
   <div class="flex items-center gap-3">
-    <button class="p-2 rounded-xl bg-white/60" onclick="window.location.href='/worker'">
+    <button class="p-2 rounded-xl bg-white/60 hover:bg-white/80 transition-colors" onclick="window.location.href='/worker'">
       <span class="material-symbols-outlined text-primary scale-90">arrow_back</span>
     </button>
     <span class="font-headline font-extrabold text-primary tracking-tight text-xl">Aetheric</span>
+    <span class="hidden md:inline text-primary/30 text-sm">— Worker Registration</span>
   </div>
-  <div class="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-primary/20 to-transparent">
-    <div class="w-full h-full rounded-full overflow-hidden border-2 border-white bg-primary/10 flex items-center justify-center">
-      <span class="material-symbols-outlined text-primary">person</span>
-    </div>
+  <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white bg-primary/10 flex items-center justify-center">
+    <span class="material-symbols-outlined text-primary">person</span>
   </div>
 </header>
 
-<main class="flex-grow pt-28 pb-36 px-6 max-w-2xl mx-auto w-full relative">
-  <!-- Header -->
-  <section class="mb-10 text-center md:text-left">
-    <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/5 border border-primary/10 mb-4">
-      <span id="step-label" class="text-primary font-bold tracking-widest text-[10px] uppercase">Step 1 of 3</span>
-    </div>
-    <h1 id="step-title" class="font-headline font-extrabold text-4xl text-primary tracking-tight leading-tight mb-4">
-      Tell us about yourself
-    </h1>
-    <p id="step-desc" class="text-on-surface-variant text-lg leading-relaxed max-w-md">
-      Fill in your basic details to get started as an Aetheric service professional.
-    </p>
-  </section>
+<!-- Main Layout -->
+<main class="pt-28 pb-36 md:pb-16 px-6 md:px-12">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex flex-col md:flex-row md:gap-12">
 
-  <!-- Step 1: Basic Info -->
-  <section id="step-1" class="aether-glass rounded-[2.5rem] p-6 mb-8 fade-in">
-    <div class="space-y-6">
-      <div>
-        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Full Name</label>
-        <input id="reg-name" type="text" placeholder="Your name" 
-          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
-      </div>
-      <div>
-        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Phone Number</label>
-        <input id="reg-phone" type="tel" placeholder="+91 XXXXX XXXXX" 
-          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
-      </div>
-      <div>
-        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Location</label>
-        <input id="reg-location" type="text" placeholder="Your area/city" 
-          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
-      </div>
-      <div>
-        <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Hourly Rate (₹)</label>
-        <input id="reg-rate" type="number" placeholder="500" 
-          class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
-      </div>
-    </div>
-  </section>
-
-  <!-- Step 2: Skills (hidden initially) -->
-  <section id="step-2" class="aether-glass rounded-[2.5rem] p-6 mb-8" style="display:none;">
-    <div class="grid grid-cols-2 gap-3" id="skills-grid">
-      <!-- Skills will be rendered by JS -->
-    </div>
-  </section>
-
-  <!-- Step 3: Bio (hidden initially) -->
-  <section id="step-3" class="aether-glass rounded-[2.5rem] p-6 mb-8" style="display:none;">
-    <div>
-      <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">About You</label>
-      <textarea id="reg-bio" rows="4" placeholder="Tell customers about your experience and specialties..."
-        class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30 resize-none"></textarea>
-    </div>
-    <div class="mt-6">
-      <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Years of Experience</label>
-      <input id="reg-experience" type="text" placeholder="e.g. 5 years"
-        class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/30"/>
-    </div>
-  </section>
-
-  <!-- Success (hidden) -->
-  <section id="step-success" class="text-center" style="display:none;">
-    <div class="text-6xl mb-6">🎉</div>
-    <h2 class="font-headline font-extrabold text-3xl text-primary mb-4">Welcome Aboard!</h2>
-    <p class="text-on-surface-variant text-lg mb-8">Your profile is live. Start accepting bookings now.</p>
-    <button onclick="window.location.href='/worker'" class="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-xl">
-      Go to Dashboard →
-    </button>
-  </section>
-
-  <!-- Info Cards -->
-  <section id="info-cards" class="space-y-4">
-    <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
-          <span class="material-symbols-outlined text-primary">trending_up</span>
-        </div>
-        <div>
-          <h3 class="font-label font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Market Velocity</h3>
-          <p class="text-sm text-primary/90 font-medium leading-relaxed">
-            Electricians are seeing a <span class="text-primary font-bold">+24% surge</span> in premium local requests this month.
+      <!-- Left: Form -->
+      <div class="md:flex-1 md:max-w-lg">
+        <!-- Step Label -->
+        <div class="mb-10 text-center md:text-left">
+          <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/5 border border-primary/10 mb-4">
+            <span id="step-label" class="text-primary font-bold tracking-widest text-[10px] uppercase">Step 1 of 3</span>
+          </div>
+          <h1 id="step-title" class="font-headline font-extrabold text-3xl md:text-4xl text-primary tracking-tight leading-tight mb-4">
+            Tell us about yourself
+          </h1>
+          <p id="step-desc" class="text-primary/50 text-base md:text-lg leading-relaxed max-w-md">
+            Fill in your basic details to get started as an Aetheric service professional.
           </p>
         </div>
+
+        <!-- Step 1: Basic Info -->
+        <section id="step-1" class="glass-card rounded-[2.5rem] p-6 md:p-8 mb-8 fade-in">
+          <div class="space-y-6">
+            <div>
+              <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Full Name</label>
+              <input id="reg-name" type="text" placeholder="Your name"
+                class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 transition-all"/>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Phone Number</label>
+              <input id="reg-phone" type="tel" placeholder="+91 XXXXX XXXXX"
+                class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 transition-all"/>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Location</label>
+              <input id="reg-location" type="text" placeholder="Your area/city"
+                class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 transition-all"/>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Hourly Rate (₹)</label>
+              <input id="reg-rate" type="number" placeholder="500"
+                class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 transition-all"/>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2: Skills -->
+        <section id="step-2" class="glass-card rounded-[2.5rem] p-6 md:p-8 mb-8" style="display:none;">
+          <div class="grid grid-cols-2 gap-3" id="skills-grid"></div>
+        </section>
+
+        <!-- Step 3: Bio -->
+        <section id="step-3" class="glass-card rounded-[2.5rem] p-6 md:p-8 mb-8" style="display:none;">
+          <div>
+            <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">About You</label>
+            <textarea id="reg-bio" rows="4" placeholder="Tell customers about your experience and specialties..."
+              class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 resize-none transition-all"></textarea>
+          </div>
+          <div class="mt-6">
+            <label class="text-xs font-bold text-primary/50 uppercase tracking-widest mb-2 block">Years of Experience</label>
+            <input id="reg-experience" type="text" placeholder="e.g. 5 years"
+              class="w-full px-5 py-4 rounded-2xl bg-white/60 border border-white/60 text-primary font-medium focus:ring-2 focus:ring-accent/20 focus:border-accent/30 transition-all"/>
+          </div>
+        </section>
+
+        <!-- Success -->
+        <section id="step-success" class="text-center" style="display:none;">
+          <div class="text-6xl mb-6">🎉</div>
+          <h2 class="font-headline font-extrabold text-3xl text-primary mb-4">Welcome Aboard!</h2>
+          <p class="text-primary/50 text-lg mb-8">Your profile is live. Start accepting bookings now.</p>
+          <button onclick="window.location.href='/worker'" class="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-xl hover:bg-primary/90 active:scale-95 transition-all">
+            Go to Dashboard →
+          </button>
+        </section>
       </div>
-    </div>
-    <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
-          <span class="material-symbols-outlined text-primary">verified_user</span>
-        </div>
-        <div>
-          <h3 class="font-label font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Impact Factor</h3>
-          <p class="text-sm text-primary/90 font-medium leading-relaxed">
-            Profiles with verified expertise see <span class="text-primary font-bold">3.2x higher</span> conversion rates.
-          </p>
+
+      <!-- Right: Info Sidebar -->
+      <div class="md:flex-1 md:max-w-sm" id="info-cards">
+        <div class="space-y-4 md:sticky md:top-28">
+          <h3 class="hidden md:block font-headline font-bold text-primary/40 text-xs uppercase tracking-[0.2em] mb-4">Why Join Aetheric?</h3>
+          <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
+                <span class="material-symbols-outlined text-primary">trending_up</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Market Velocity</h3>
+                <p class="text-sm text-primary/90 font-medium leading-relaxed">
+                  Electricians are seeing a <span class="text-primary font-bold">+24% surge</span> in premium local requests this month.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-primary/5 to-white/50 border border-white shadow-sm group">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-primary/5 shrink-0">
+                <span class="material-symbols-outlined text-primary">verified_user</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Impact Factor</h3>
+                <p class="text-sm text-primary/90 font-medium leading-relaxed">
+                  Profiles with verified expertise see <span class="text-primary font-bold">3.2x higher</span> conversion rates.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="hidden md:block relative overflow-hidden p-6 rounded-[2rem] bg-gradient-to-br from-accent/5 to-white/50 border border-white shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-accent/5 shrink-0">
+                <span class="material-symbols-outlined text-accent">payments</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-[11px] uppercase tracking-[0.15em] text-primary/50 mb-1">Earnings</h3>
+                <p class="text-sm text-primary/90 font-medium leading-relaxed">
+                  Top workers earn <span class="text-primary font-bold">₹25,000+/month</span> through the platform.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
-  </section>
+  </div>
 </main>
 
 <!-- Bottom Action Bar -->
-<footer class="fixed bottom-0 left-0 w-full p-6 z-50">
-  <div class="max-w-2xl mx-auto flex items-center gap-4 aether-glass p-3 rounded-full shadow-2xl">
+<footer class="fixed bottom-0 left-0 w-full p-4 md:p-6 z-50">
+  <div class="max-w-lg mx-auto flex items-center gap-4 glass-card p-3 rounded-full shadow-2xl">
     <button id="prev-btn" onclick="prevStep()" class="flex-1 px-4 py-4 text-primary/60 font-bold hover:text-primary transition-colors text-sm" style="visibility:hidden;">
       Previous
     </button>
@@ -180,15 +202,15 @@
   function renderSkills() {
     const grid = document.getElementById('skills-grid');
     grid.innerHTML = allSkills.map(s => `
-      <button onclick="toggleSkill('${s.id}')" id="skill-${s.id}" 
-        class="${selectedSkills.has(s.id) ? 'skill-chip-selected text-white' : 'skill-chip-unselected text-primary/80 hover:bg-white/60'} flex items-center gap-3 px-5 py-4 rounded-2xl transition-all active:scale-95">
-        <span class="material-symbols-outlined text-[20px] ${selectedSkills.has(s.id) ? 'text-primary-container' : 'text-primary/40'}">${s.icon}</span>
-        <span class="font-label font-${selectedSkills.has(s.id) ? 'bold' : 'semibold'} text-sm">${s.name}</span>
+      <button onclick="toggleSkill('${s.id}')" id="skill-${s.id}"
+        class="${selectedSkills.has(s.id) ? 'skill-selected text-white' : 'skill-unselected text-primary/80 hover:bg-white/60'} flex items-center gap-3 px-5 py-4 rounded-2xl transition-all active:scale-95">
+        <span class="material-symbols-outlined text-[20px] ${selectedSkills.has(s.id) ? 'text-white/70' : 'text-primary/40'}">${s.icon}</span>
+        <span class="font-${selectedSkills.has(s.id) ? 'bold' : 'semibold'} text-sm">${s.name}</span>
       </button>
     `).join('') + `
       <button class="col-span-2 flex items-center justify-center gap-2 px-5 py-4 rounded-2xl bg-white/30 border border-dashed border-primary/20 text-primary/60">
         <span class="material-symbols-outlined text-[20px]">add</span>
-        <span class="font-label font-bold text-sm">More coming soon</span>
+        <span class="font-bold text-sm">More coming soon</span>
       </button>
     `;
   }
@@ -258,18 +280,14 @@
 
     try {
       const res = await fetch(`${API_BASE}/api/worker/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, skills, experience, hourlyRate: rate, bio, phone, location })
       });
       const data = await res.json();
-
       if (data.success) {
         localStorage.setItem('aetheric_worker_id', data.worker.id);
         localStorage.setItem('aetheric_worker_name', name);
         localStorage.setItem('aetheric_worker_skills', JSON.stringify(skills));
-
-        // Show success
         document.getElementById('step-3').style.display = 'none';
         document.getElementById('info-cards').style.display = 'none';
         document.getElementById('step-success').style.display = 'block';
@@ -279,9 +297,7 @@
         document.getElementById('step-title').textContent = '';
         document.getElementById('step-desc').textContent = '';
       }
-    } catch (err) {
-      alert('Registration failed. Please try again.');
-    }
+    } catch (err) { alert('Registration failed. Please try again.'); }
   }
 </script>
 <script src="/particles.js"></script>

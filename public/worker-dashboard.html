@@ -10,44 +10,40 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
-          colors: { "primary": "#121E31", "surface": "#F4F7FA", "glass-bg": "rgba(255,255,255,0.65)", "glass-border": "rgba(255,255,255,0.4)", "accent-blue": "#4A6CF7" },
-          fontFamily: { "headline": ["Manrope","sans-serif"], "body": ["Inter","sans-serif"] },
-          borderRadius: { "DEFAULT":"1.5rem","lg":"2rem","xl":"2.5rem","full":"9999px" },
-          boxShadow: { 'glass': '0 8px 32px 0 rgba(31,38,135,0.07)' }
+          colors: { "primary":"#121E31","surface":"#F4F7FA","glass-bg":"rgba(255,255,255,0.65)","accent":"#4A6CF7" },
+          fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"] },
         },
       },
     }
   </script>
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-    .glass-card { background: rgba(255,255,255,0.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px 0 rgba(18,30,49,0.04); }
-    .status-pill { background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); }
-    body { background: radial-gradient(circle at 0% 0%, #eef2f7 0%, #f4f7fa 100%); min-height: 100vh; overflow-x: hidden; }
-    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .portrait-mask { clip-path: circle(48% at 50% 50%); }
-    .fade-in { animation: fadeIn 0.5s ease-out; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-    .shake { animation: shake 0.4s ease; }
-    @keyframes shake { 0%,100%{ transform:translateX(0); } 25%{ transform:translateX(-5px); } 75%{ transform:translateX(5px); } }
-    .slide-out { animation: slideOut 0.4s ease forwards; }
-    @keyframes slideOut { to { opacity:0; transform:translateX(100%); height:0; padding:0; margin:0; overflow:hidden; } }
+    .glass-card { background:rgba(255,255,255,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.5);box-shadow:0 8px 32px 0 rgba(18,30,49,0.04); }
+    body { background:radial-gradient(circle at 0% 0%,#eef2f7 0%,#f4f7fa 100%);min-height:100vh;overflow-x:hidden; }
+    #particle-canvas { position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none; }
+    .fade-in { animation:fadeIn 0.5s ease-out; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .shake { animation:shake 0.4s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+    .slide-out { animation:slideOut 0.4s ease forwards; }
+    @keyframes slideOut { to{opacity:0;transform:translateX(100%);height:0;padding:0;margin:0;overflow:hidden} }
   </style>
 </head>
 <body class="font-body text-primary/90 antialiased">
 
-<!-- Top Nav -->
-<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-white/40 backdrop-blur-md border-b border-white/20">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-20 bg-white/40 backdrop-blur-md border-b border-white/20">
   <div class="flex items-center gap-4">
     <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/50 transition-colors" onclick="window.location.href='/'">
       <span class="material-symbols-outlined text-primary/70">arrow_back</span>
     </button>
     <h1 class="font-headline font-extrabold text-primary tracking-tight text-xl">Aetheric</h1>
+    <span class="hidden md:inline text-primary/30 text-sm">— Worker Dashboard</span>
   </div>
   <div class="flex items-center gap-3">
-    <div class="status-pill flex items-center px-4 py-1.5 rounded-full gap-2 border border-white shadow-sm">
+    <div class="flex items-center px-4 py-1.5 rounded-full gap-2 bg-white/50 backdrop-blur-sm border border-white shadow-sm">
       <div id="status-dot" class="w-2 h-2 bg-emerald-500 rounded-full"></div>
       <span id="status-label" class="text-[11px] font-bold text-primary/60 uppercase tracking-[0.1em]">Online</span>
     </div>
@@ -57,101 +53,125 @@
   </div>
 </header>
 
-<main class="pt-28 pb-32 px-6 max-w-lg mx-auto space-y-8">
-  <!-- Active Status -->
-  <section>
-    <div class="glass-card p-6 rounded-3xl flex items-center justify-between">
-      <div>
-        <h2 class="font-headline font-bold text-lg text-primary tracking-tight leading-tight">Active Status</h2>
-        <p class="text-primary/50 text-xs font-medium mt-1">Accepting new service requests</p>
-      </div>
-      <button id="toggle-btn" onclick="toggleAvailability()" class="relative inline-flex h-9 w-16 items-center rounded-full bg-primary transition-all shadow-inner ring-4 ring-white/10">
-        <span id="toggle-knob" class="translate-x-8 inline-block h-7 w-7 transform rounded-full bg-white shadow-xl transition-transform duration-300"></span>
-      </button>
-    </div>
-  </section>
+<!-- Main Layout: Mobile=stacked, Desktop=2 column -->
+<main class="pt-28 pb-32 md:pb-16 px-6 md:px-12">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:gap-8">
 
-  <!-- Incoming Bookings -->
-  <section class="space-y-4">
-    <div class="flex items-center justify-between px-2">
-      <h3 class="font-headline font-bold text-primary/80 text-sm uppercase tracking-widest">Incoming Bookings</h3>
-      <span id="booking-badge" class="text-[10px] font-bold text-white px-2.5 py-1 bg-accent-blue rounded-full uppercase tracking-tighter" style="display:none;">New Request</span>
-    </div>
-
-    <div id="bookings-container">
-      <!-- Bookings will be injected here -->
-      <div id="no-bookings" class="glass-card p-8 rounded-[2.5rem] text-center">
-        <span class="material-symbols-outlined text-primary/20 text-5xl mb-4">inbox</span>
-        <p class="text-primary/40 font-medium">No incoming bookings yet</p>
-        <p class="text-primary/30 text-xs mt-1">New requests will appear here in real-time</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="grid grid-cols-2 gap-5">
-    <div class="glass-card p-6 rounded-[2rem] relative overflow-hidden group">
-      <div class="absolute -right-4 -top-4 w-12 h-12 bg-accent-blue/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
-      <div class="flex flex-col gap-4">
-        <div class="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center border border-white shadow-sm">
-          <span class="material-symbols-outlined text-accent-blue">account_balance_wallet</span>
-        </div>
-        <div>
-          <p class="text-[10px] font-bold text-primary/40 uppercase tracking-widest mb-1">Today's Total</p>
-          <h4 id="earnings" class="font-headline font-extrabold text-2xl text-primary">₹0.00</h4>
-        </div>
-      </div>
-    </div>
-    <div class="glass-card p-6 rounded-[2rem] relative overflow-hidden group">
-      <div class="absolute -right-4 -top-4 w-12 h-12 bg-amber-400/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
-      <div class="flex flex-col gap-4">
-        <div class="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center border border-white shadow-sm">
-          <span class="material-symbols-outlined text-amber-500">star</span>
-        </div>
-        <div>
-          <p class="text-[10px] font-bold text-primary/40 uppercase tracking-widest mb-1">Rating</p>
-          <h4 id="rating" class="font-headline font-extrabold text-2xl text-primary">4.95</h4>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quick Actions -->
-  <section class="space-y-4">
-    <h3 class="font-headline font-bold text-primary/80 text-sm uppercase tracking-widest px-2">Management</h3>
-    <div class="grid grid-cols-1 gap-3">
-      <button class="glass-card px-5 py-4 rounded-2xl flex items-center justify-between group active:scale-[0.99] transition-all">
-        <div class="flex items-center gap-4">
-          <div class="w-11 h-11 rounded-full bg-primary/5 flex items-center justify-center text-primary/70 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-            <span class="material-symbols-outlined">history_edu</span>
+      <!-- Left Column (main content) -->
+      <div class="md:flex-1 space-y-8">
+        <!-- Active Status -->
+        <section>
+          <div class="glass-card p-6 rounded-3xl flex items-center justify-between">
+            <div>
+              <h2 class="font-headline font-bold text-lg text-primary tracking-tight leading-tight">Active Status</h2>
+              <p class="text-primary/50 text-xs font-medium mt-1">Accepting new service requests</p>
+            </div>
+            <button id="toggle-btn" onclick="toggleAvailability()" class="relative inline-flex h-9 w-16 items-center rounded-full bg-primary transition-all shadow-inner ring-4 ring-white/10">
+              <span id="toggle-knob" class="translate-x-8 inline-block h-7 w-7 transform rounded-full bg-white shadow-xl transition-transform duration-300"></span>
+            </button>
           </div>
-          <span class="font-bold text-primary/80 tracking-tight">Job History</span>
-        </div>
-        <span class="material-symbols-outlined text-primary/20 group-hover:text-primary transition-colors">arrow_forward_ios</span>
-      </button>
-      <button onclick="window.location.href='/worker/onboarding'" class="glass-card px-5 py-4 rounded-2xl flex items-center justify-between group active:scale-[0.99] transition-all">
-        <div class="flex items-center gap-4">
-          <div class="w-11 h-11 rounded-full bg-primary/5 flex items-center justify-center text-primary/70 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-            <span class="material-symbols-outlined">edit</span>
+        </section>
+
+        <!-- Incoming Bookings -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between px-2">
+            <h3 class="font-headline font-bold text-primary/80 text-sm uppercase tracking-widest">Incoming Bookings</h3>
+            <span id="booking-badge" class="text-[10px] font-bold text-white px-2.5 py-1 bg-accent rounded-full uppercase tracking-tighter" style="display:none;">New Request</span>
           </div>
-          <span class="font-bold text-primary/80 tracking-tight">Edit Skills Profile</span>
+          <div id="bookings-container">
+            <div id="no-bookings" class="glass-card p-8 rounded-[2.5rem] text-center">
+              <span class="material-symbols-outlined text-primary/20 text-5xl mb-4">inbox</span>
+              <p class="text-primary/40 font-medium">No incoming bookings yet</p>
+              <p class="text-primary/30 text-xs mt-1">New requests will appear here in real-time</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column (sidebar - stats + management) -->
+      <div class="md:w-80 space-y-8 mt-8 md:mt-0">
+        <!-- Stats -->
+        <section class="grid grid-cols-2 md:grid-cols-1 gap-5">
+          <div class="glass-card p-6 rounded-[2rem] relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-12 h-12 bg-accent/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="flex flex-col gap-4">
+              <div class="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center border border-white shadow-sm">
+                <span class="material-symbols-outlined text-accent">account_balance_wallet</span>
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-primary/40 uppercase tracking-widest mb-1">Today's Total</p>
+                <h4 id="earnings" class="font-headline font-extrabold text-2xl text-primary">₹0.00</h4>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-[2rem] relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-12 h-12 bg-amber-400/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+            <div class="flex flex-col gap-4">
+              <div class="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center border border-white shadow-sm">
+                <span class="material-symbols-outlined text-amber-500">star</span>
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-primary/40 uppercase tracking-widest mb-1">Rating</p>
+                <h4 id="rating" class="font-headline font-extrabold text-2xl text-primary">4.95</h4>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Management -->
+        <section class="space-y-4">
+          <h3 class="font-headline font-bold text-primary/80 text-sm uppercase tracking-widest px-2">Management</h3>
+          <div class="grid grid-cols-1 gap-3">
+            <button class="glass-card px-5 py-4 rounded-2xl flex items-center justify-between group active:scale-[0.99] transition-all">
+              <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-full bg-primary/5 flex items-center justify-center text-primary/70 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <span class="material-symbols-outlined">history_edu</span>
+                </div>
+                <span class="font-bold text-primary/80 tracking-tight">Job History</span>
+              </div>
+              <span class="material-symbols-outlined text-primary/20 group-hover:text-primary transition-colors">arrow_forward_ios</span>
+            </button>
+            <button onclick="window.location.href='/worker/onboarding'" class="glass-card px-5 py-4 rounded-2xl flex items-center justify-between group active:scale-[0.99] transition-all">
+              <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-full bg-primary/5 flex items-center justify-center text-primary/70 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <span class="material-symbols-outlined">edit</span>
+                </div>
+                <span class="font-bold text-primary/80 tracking-tight">Edit Skills Profile</span>
+              </div>
+              <span class="material-symbols-outlined text-primary/20 group-hover:text-primary transition-colors">arrow_forward_ios</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Desktop: Quick Links -->
+        <div class="hidden md:block glass-card p-5 rounded-2xl">
+          <p class="text-[10px] font-bold text-primary/30 uppercase tracking-wider mb-2">Quick Links</p>
+          <div class="space-y-2">
+            <a href="/chat" class="flex items-center gap-3 text-sm font-medium text-primary/60 hover:text-primary transition-colors py-1">
+              <span class="material-symbols-outlined text-[18px]">forum</span> Open Chat
+            </a>
+            <a href="/" class="flex items-center gap-3 text-sm font-medium text-primary/60 hover:text-primary transition-colors py-1">
+              <span class="material-symbols-outlined text-[18px]">home</span> User Home
+            </a>
+          </div>
         </div>
-        <span class="material-symbols-outlined text-primary/20 group-hover:text-primary transition-colors">arrow_forward_ios</span>
-      </button>
+      </div>
+
     </div>
-  </section>
+  </div>
 </main>
 
-<!-- Bottom Nav -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-24 px-8 bg-white/70 backdrop-blur-2xl border-t border-white/20 rounded-t-[3rem] shadow-2xl">
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-24 px-8 bg-white/70 backdrop-blur-2xl border-t border-white/20 rounded-t-[3rem] shadow-2xl">
   <button class="p-4 bg-primary text-white rounded-full shadow-lg shadow-primary/30 transform -translate-y-4 active:scale-90 transition-all">
     <span class="material-symbols-outlined">dashboard_customize</span>
   </button>
   <button class="p-3 text-primary/30 hover:text-primary transition-colors" onclick="window.location.href='/chat'">
     <span class="material-symbols-outlined">forum</span>
   </button>
-  <button class="p-3 text-primary/30 hover:text-primary transition-colors">
-    <span class="material-symbols-outlined">notifications</span>
+  <button class="p-3 text-primary/30 hover:text-primary transition-colors" onclick="window.location.href='/'">
+    <span class="material-symbols-outlined">home</span>
   </button>
   <button class="p-3 text-primary/30 hover:text-primary transition-colors">
     <span class="material-symbols-outlined">settings</span>
@@ -160,40 +180,30 @@
 
 <script>
   const API_BASE = window.location.origin;
-  let workerId = localStorage.getItem('aetheric_worker_id') || 'wrk_003'; // Default: FlowState Plumbing
+  let workerId = localStorage.getItem('aetheric_worker_id') || 'wrk_003';
   let workerName = localStorage.getItem('aetheric_worker_name') || 'FlowState Plumbing';
   let workerSkills = JSON.parse(localStorage.getItem('aetheric_worker_skills') || '["Plumber"]');
   let available = true;
   let totalEarnings = 0;
   let bookingCount = 0;
 
-  // ── WebSocket ──
+  // WebSocket
   let ws = null;
   function connectWS() {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     ws = new WebSocket(`${protocol}://${window.location.host}/ws`);
     ws.onopen = () => {
-      ws.send(JSON.stringify({
-        type: 'register',
-        payload: { role: 'worker', id: workerId, name: workerName, skills: workerSkills }
-      }));
+      ws.send(JSON.stringify({ type: 'register', payload: { role: 'worker', id: workerId, name: workerName, skills: workerSkills } }));
       console.log('Worker WebSocket connected');
     };
-
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('WS message:', data);
-
       if (data.type === 'new_booking') {
         showBookingCard(data.booking);
-        // Play notification sound
         try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAABhYGFh').play(); } catch(e) {}
       }
-      if (data.type === 'response_confirmed') {
-        console.log('Response confirmed:', data);
-      }
+      if (data.type === 'response_confirmed') console.log('Response confirmed:', data);
     };
-
     ws.onclose = () => setTimeout(connectWS, 3000);
   }
   connectWS();
@@ -204,7 +214,6 @@
     const label = document.getElementById('status-label');
     const knob = document.getElementById('toggle-knob');
     const btn = document.getElementById('toggle-btn');
-
     if (available) {
       dot.className = 'w-2 h-2 bg-emerald-500 rounded-full';
       label.textContent = 'Online';
@@ -222,21 +231,20 @@
     const container = document.getElementById('bookings-container');
     const noBookings = document.getElementById('no-bookings');
     if (noBookings) noBookings.style.display = 'none';
-
     document.getElementById('booking-badge').style.display = 'inline';
 
     const card = document.createElement('div');
     card.id = `booking-${booking.bookingId}`;
     card.className = 'relative overflow-hidden rounded-[2.5rem] bg-primary shadow-2xl shadow-primary/20 p-8 mb-4 fade-in';
     card.innerHTML = `
-      <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent-blue/20 rounded-full blur-[80px]"></div>
+      <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/20 rounded-full blur-[80px]"></div>
       <div class="relative z-10">
         <div class="flex items-center gap-5">
           <div class="w-20 h-20 rounded-2xl bg-white/10 flex items-center justify-center text-4xl border border-white/20">
-            ${booking.worker?.photo || '👤'}
+            ${booking.worker?.photo || booking.photo || '👤'}
           </div>
           <div>
-            <h4 class="font-headline font-bold text-2xl text-white tracking-tight">${booking.worker?.name || 'Customer'}</h4>
+            <h4 class="font-headline font-bold text-2xl text-white tracking-tight">${booking.worker?.name || booking.name || 'Customer'}</h4>
             <div class="flex items-center gap-1.5 text-white/50 text-xs font-medium mt-1">
               <span class="material-symbols-outlined text-[14px]">location_on</span>
               <span>${booking.address || 'Nearby'}</span>
@@ -246,7 +254,7 @@
         <div class="mt-8 pt-8 border-t border-white/10">
           <span class="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Requested Service</span>
           <h5 class="font-headline font-bold text-xl text-white mt-1">${booking.service || booking.skill || 'Service Request'}</h5>
-          <p class="mt-4 text-white/60 text-sm leading-relaxed italic font-light border-l-2 border-accent-blue/30 pl-4">
+          <p class="mt-4 text-white/60 text-sm leading-relaxed italic font-light border-l-2 border-accent/30 pl-4">
             "${booking.description || 'Customer needs assistance'}"
           </p>
           ${booking.urgency === 'urgent' ? '<span class="inline-block mt-3 px-3 py-1 bg-red-500/20 text-red-300 text-[10px] font-bold uppercase tracking-widest rounded-full">🔴 Urgent</span>' : ''}
@@ -268,20 +276,12 @@
 
   async function respondToBooking(bookingId, action) {
     const card = document.getElementById(`booking-${bookingId}`);
-
-    // Send via WebSocket
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({
-        type: 'worker_response',
-        payload: { bookingId, action, estimatedArrival: '15-20 min' }
-      }));
+      ws.send(JSON.stringify({ type: 'worker_response', payload: { bookingId, action, estimatedArrival: '15-20 min' } }));
     }
-
-    // Also call REST API
     try {
       await fetch(`${API_BASE}/api/worker/respond`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bookingId, action, workerId })
       });
     } catch (e) { console.error('API call failed:', e); }
@@ -295,7 +295,6 @@
       card.classList.add('shake');
       setTimeout(() => { card.classList.add('slide-out'); setTimeout(() => card.remove(), 500); }, 400);
     }
-
     bookingCount--;
     if (bookingCount <= 0) {
       document.getElementById('booking-badge').style.display = 'none';
