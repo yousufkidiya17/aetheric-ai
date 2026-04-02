@@ -4,440 +4,295 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Aetheric — AI Chat</title>
-  <meta name="description" content="Chat with Aetheric AI to book food, rides, and local services."/>
+  <meta name="description" content="Chat with Aetheric AI to order food, book rides, and hire workers."/>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: { "primary":"#121E31","accent-blue":"#3B82F6","surface":"#F8F9FC","glass-light":"rgba(255,255,255,0.6)","glass-dark":"rgba(18,30,49,0.8)","on-surface":"#121E31","outline-variant":"rgba(18,30,49,0.1)" },
-          fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"],"label":["Inter","sans-serif"] },
-          borderRadius: { "DEFAULT":"1.25rem","lg":"2rem","xl":"3rem","full":"9999px" },
-        },
-      },
+      theme: { extend: {
+        colors: { "primary":"#121E31","accent":"#6366f1","surface":"#F8FAFC" },
+        fontFamily: { "headline":["Manrope","sans-serif"],"body":["Inter","sans-serif"] }
+      }}
     }
   </script>
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-    .hide-scrollbar::-webkit-scrollbar { display:none; }
-    .hide-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
-    .glass-pane { background:rgba(255,255,255,0.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.5); box-shadow:0 8px 32px 0 rgba(31,38,135,0.07); }
-    .glass-pane-dark { background:rgba(18,30,49,0.85); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px 0 rgba(0,0,0,0.2); }
-    .gradient-button { background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%); box-shadow:0 4px 14px 0 rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.1); }
-    .gradient-button:active { transform:translateY(1px); }
-    body { min-height:100dvh; background-color:#fcfdfe; overflow-x: hidden; }
-    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .fade-in { animation: fadeIn 0.5s ease-out; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
-    .typing-dots span { animation: blink 1.4s infinite both; }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink { 0%,80%,100% { opacity:0.2; } 40% { opacity:1; } }
+    body { background: radial-gradient(at 0% 0%,rgba(18,30,49,0.05) 0,transparent 50%),radial-gradient(at 100% 0%,rgba(99,102,241,0.08) 0,transparent 50%),#f1f5f9; min-height:100vh; margin:0; overflow-x:hidden; }
+    #particle-canvas { position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none; }
+    .glass-card { background:rgba(255,255,255,0.4);backdrop-filter:blur(40px);border:0.5px solid rgba(255,255,255,0.4);box-shadow:0 10px 30px -5px rgba(0,0,0,0.03),inset 0 1px 1px rgba(255,255,255,0.8); }
+    .ai-bubble { background-color:#545F75;color:white;border-bottom-left-radius:4px; }
+    .user-bubble { background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.5);color:#121E31;border-bottom-right-radius:4px; }
+    .mcp-card { background:linear-gradient(135deg,rgba(255,255,255,0.7),rgba(255,255,255,0.4));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.5); }
+    .suggestion-chip { background:rgba(255,255,255,0.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.4); }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .fade-in { animation:fadeIn 0.3s ease-out; }
+    @keyframes typing { 0%{opacity:0.3} 50%{opacity:1} 100%{opacity:0.3} }
+    .typing-dot { animation:typing 1.4s infinite; }
+    .typing-dot:nth-child(2) { animation-delay:0.2s; }
+    .typing-dot:nth-child(3) { animation-delay:0.4s; }
+
+    /* Desktop: Chat centered like WhatsApp Web */
+    @media (min-width: 768px) {
+      .chat-container { max-width:900px; margin:0 auto; display:flex; height:calc(100vh - 80px); }
+      .chat-sidebar { width:280px; border-right:1px solid rgba(255,255,255,0.3); padding:1.5rem; display:flex; flex-direction:column; gap:1rem; }
+      .chat-main { flex:1; display:flex; flex-direction:column; }
+    }
+    @media (max-width: 767px) {
+      .chat-sidebar { display:none !important; }
+      .chat-main { height:calc(100vh - 80px); }
+    }
   </style>
 </head>
-<body class="font-body text-on-surface antialiased hide-scrollbar">
+<body class="font-body text-primary antialiased">
 
-<!-- Top Navigation -->
-<header class="fixed top-0 w-full z-50 bg-white/40 backdrop-blur-2xl border-b border-white/20 flex justify-between items-center px-6 h-16">
-  <div class="flex items-center gap-4">
-    <button class="text-primary hover:opacity-80 transition-opacity active:scale-95" onclick="window.location.href='/'">
-      <span class="material-symbols-outlined">arrow_back</span>
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-20 bg-white/40 backdrop-blur-xl border-b border-white/20">
+  <div class="flex items-center gap-3">
+    <button class="p-2 rounded-xl hover:bg-white/50 transition-colors" onclick="window.location.href='/'">
+      <span class="material-symbols-outlined text-primary/70">arrow_back</span>
     </button>
-    <h1 class="font-headline font-extrabold text-primary tracking-tight text-xl uppercase">Aetheric</h1>
+    <span class="font-headline font-extrabold text-primary text-xl tracking-tight">Aetheric</span>
+    <span class="hidden md:inline text-primary/30 text-sm">— AI Chat</span>
   </div>
-  <div class="flex items-center gap-4">
-    <button class="text-primary font-bold" onclick="clearChat()">
-      <span class="material-symbols-outlined">delete_sweep</span>
-    </button>
-    <div class="w-9 h-9 rounded-full ring-2 ring-white/50 bg-primary/10 flex items-center justify-center shadow-sm">
-      <span class="material-symbols-outlined text-primary text-[20px]">person</span>
+  <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 border border-white/40">
+      <div id="ws-status" class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+      <span id="ws-label" class="text-[10px] font-bold text-primary/50 uppercase tracking-wider">Connecting</span>
     </div>
+    <button id="voice-toggle" onclick="toggleVoice()" class="hidden md:flex w-10 h-10 rounded-full bg-primary/5 items-center justify-center hover:bg-primary/10 transition-colors">
+      <span class="material-symbols-outlined text-primary/60 text-[20px]">mic</span>
+    </button>
   </div>
 </header>
 
-<!-- Chat Canvas -->
-<main id="chat-container" class="pt-24 pb-48 px-4 md:px-8 max-w-4xl mx-auto flex flex-col gap-8">
-  <!-- Welcome Message -->
-  <div class="flex flex-col items-start gap-5 mr-12 fade-in">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg">
-        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
-      </div>
-      <span class="text-[11px] font-headline font-extrabold text-primary tracking-[0.2em] uppercase">Aetheric Intelligence</span>
-    </div>
-    <div class="glass-pane-dark text-white px-7 py-6 rounded-[2.5rem] rounded-tl-md max-w-lg relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/5 blur-3xl rounded-full"></div>
-      <p class="text-[16px] font-body leading-relaxed relative z-10 opacity-95">
-        Hello! I'm your <span class="text-blue-300 font-semibold">Aetheric AI</span> assistant. I can help you:
-        <br/><br/>
-        🍕 <strong>Order Food</strong> — Browse restaurants & place orders<br/>
-        🚕 <strong>Book Rides</strong> — Cabs, autos, bikes<br/>
-        🔧 <strong>Hire Workers</strong> — Plumbers, electricians, tutors<br/>
-        <br/>
-        Just type or speak anything!
-      </p>
+<!-- Chat Layout -->
+<div class="chat-container pt-20">
+  
+  <!-- Desktop Sidebar -->
+  <div class="chat-sidebar">
+    <h3 class="font-headline font-bold text-primary/40 text-[10px] uppercase tracking-[0.2em]">Quick Actions</h3>
+    <button onclick="sendMessage('Show me nearby restaurants')" class="glass-card p-4 rounded-2xl flex items-center gap-3 hover:bg-white/60 transition-all text-left group">
+      <span class="material-symbols-outlined text-orange-500/60 group-hover:text-orange-500 transition-colors">restaurant</span>
+      <span class="text-sm font-medium text-primary/70">Order Food</span>
+    </button>
+    <button onclick="sendMessage('Book a ride to airport')" class="glass-card p-4 rounded-2xl flex items-center gap-3 hover:bg-white/60 transition-all text-left group">
+      <span class="material-symbols-outlined text-blue-500/60 group-hover:text-blue-500 transition-colors">local_taxi</span>
+      <span class="text-sm font-medium text-primary/70">Book Ride</span>
+    </button>
+    <button onclick="sendMessage('Find a plumber near me')" class="glass-card p-4 rounded-2xl flex items-center gap-3 hover:bg-white/60 transition-all text-left group">
+      <span class="material-symbols-outlined text-green-500/60 group-hover:text-green-500 transition-colors">plumbing</span>
+      <span class="text-sm font-medium text-primary/70">Hire Worker</span>
+    </button>
+    <button onclick="sendMessage('I need an electrician urgently')" class="glass-card p-4 rounded-2xl flex items-center gap-3 hover:bg-white/60 transition-all text-left group">
+      <span class="material-symbols-outlined text-yellow-500/60 group-hover:text-yellow-500 transition-colors">electrical_services</span>
+      <span class="text-sm font-medium text-primary/70">Electrician</span>
+    </button>
+    <div class="mt-auto glass-card p-4 rounded-2xl">
+      <p class="text-[10px] font-bold text-primary/30 uppercase tracking-wider mb-1">Powered by</p>
+      <p class="text-xs font-semibold text-primary/60">Mistral AI + MCP</p>
     </div>
   </div>
 
-  <!-- Suggestion Chips -->
-  <div id="initial-suggestions" class="flex flex-wrap gap-2.5 mt-2">
-    <button onclick="sendSuggestion('I am hungry, suggest something')" class="px-5 py-2.5 glass-pane rounded-full text-xs font-semibold text-slate-600 hover:bg-white/70 transition-colors">I'm hungry 🍕</button>
-    <button onclick="sendSuggestion('Book a ride to the airport')" class="px-5 py-2.5 glass-pane rounded-full text-xs font-semibold text-slate-600 hover:bg-white/70 transition-colors">Ride to airport 🚕</button>
-    <button onclick="sendSuggestion('I need a plumber urgently')" class="px-5 py-2.5 glass-pane rounded-full text-xs font-semibold text-slate-600 hover:bg-white/70 transition-colors">Need a plumber 🔧</button>
-    <button onclick="sendSuggestion('Find me a math tutor')" class="px-5 py-2.5 glass-pane rounded-full text-xs font-semibold text-slate-600 hover:bg-white/70 transition-colors">Math tutor 📚</button>
-  </div>
-</main>
-
-<!-- Bottom Input -->
-<footer class="fixed bottom-0 left-0 w-full z-50">
-  <div class="max-w-4xl mx-auto px-4 pb-6">
-    <div class="glass-pane rounded-full p-2.5 flex items-center gap-3 border-white/60 shadow-2xl">
-      <button class="w-11 h-11 flex items-center justify-center text-slate-400 hover:text-primary transition-colors hover:bg-white/40 rounded-full" onclick="window.location.href='/'">
-        <span class="material-symbols-outlined">home</span>
-      </button>
-      <div class="flex-grow">
-        <input id="chat-input" class="w-full bg-transparent border-none focus:ring-0 text-[15px] font-body text-primary placeholder:text-slate-400" 
-          placeholder="Ask Aetheric anything..." type="text"
-          onkeydown="if(event.key==='Enter') sendChat()"/>
+  <!-- Chat Main Area -->
+  <div class="chat-main flex flex-col">
+    <!-- Messages -->
+    <div id="messages" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+      <div class="flex w-full justify-start fade-in">
+        <div class="ai-bubble max-w-[85%] md:max-w-[70%] p-4 rounded-t-2xl rounded-br-2xl text-sm font-medium leading-relaxed shadow-sm">
+          Hello! I'm Aetheric ✨ I can help you order food, book rides, or find service professionals. What do you need today?
+        </div>
       </div>
-      <div class="flex items-center gap-2 pr-1">
-        <button id="mic-btn" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" onclick="toggleMic()">
-          <span id="mic-icon" class="material-symbols-outlined">mic</span>
+    </div>
+
+    <!-- Suggestions -->
+    <div id="suggestions" class="px-4 md:px-6 pb-2 flex flex-wrap gap-2">
+      <button onclick="sendMessage('I\'m hungry')" class="suggestion-chip px-4 py-2 rounded-full text-xs font-bold text-primary/70 hover:bg-white/70 active:scale-95 transition-all">🍕 I'm hungry</button>
+      <button onclick="sendMessage('Book a ride')" class="suggestion-chip px-4 py-2 rounded-full text-xs font-bold text-primary/70 hover:bg-white/70 active:scale-95 transition-all">🚕 Book a ride</button>
+      <button onclick="sendMessage('Need a plumber')" class="suggestion-chip px-4 py-2 rounded-full text-xs font-bold text-primary/70 hover:bg-white/70 active:scale-95 transition-all">🔧 Need a plumber</button>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="p-4 md:p-6 bg-white/30 border-t border-white/30">
+      <div class="relative flex items-center gap-3">
+        <button id="mic-btn" onclick="toggleVoice()" class="md:hidden w-11 h-11 rounded-full bg-primary/5 flex items-center justify-center active:scale-90 transition-all flex-shrink-0">
+          <span class="material-symbols-outlined text-primary/60 text-[20px]">mic</span>
         </button>
-        <button onclick="sendChat()" class="w-11 h-11 gradient-button text-white rounded-full flex items-center justify-center">
-          <span class="material-symbols-outlined text-[18px]">send</span>
-        </button>
+        <div class="relative flex-1">
+          <input type="text" id="chat-input" placeholder="Type a message..." 
+            class="w-full py-4 pl-5 pr-14 rounded-full bg-white/70 border border-white/60 focus:outline-none focus:ring-2 focus:ring-accent/20 text-primary placeholder:text-primary/40 font-medium text-sm md:text-base"
+            onkeydown="if(event.key==='Enter')sendMessage()"/>
+          <button onclick="sendMessage()" id="send-btn"
+            class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center disabled:opacity-50 transition-all active:scale-95 hover:bg-primary/90">
+            <span class="material-symbols-outlined text-[18px]">send</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <!-- Bottom Nav -->
-  <nav class="bg-white/30 backdrop-blur-3xl border-t border-white/20 flex justify-around items-center px-8 h-20 w-full rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
-    <div class="flex flex-col items-center gap-1 text-slate-400 p-3 hover:text-primary transition-colors" onclick="window.location.href='/'">
-      <span class="material-symbols-outlined">home</span>
-    </div>
-    <div class="flex flex-col items-center gap-1 text-primary">
-      <div class="bg-primary text-white rounded-full p-3.5 scale-110 -translate-y-4 shadow-xl shadow-primary/20 flex items-center justify-center ring-4 ring-white/10">
-        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">chat_bubble</span>
-      </div>
-    </div>
-    <div class="flex flex-col items-center gap-1 text-slate-400 p-3 hover:text-primary transition-colors" onclick="window.location.href='/worker'">
-      <span class="material-symbols-outlined">work</span>
-    </div>
-    <div class="flex flex-col items-center gap-1 text-slate-400 p-3 hover:text-primary transition-colors">
-      <span class="material-symbols-outlined">settings</span>
-    </div>
-  </nav>
-</footer>
-
-<!-- Ambient Glow -->
-<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
-  <div class="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-blue-100/30 blur-[150px] rounded-full"></div>
-  <div class="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-slate-200/40 blur-[120px] rounded-full"></div>
 </div>
 
 <script>
-  const API_BASE = window.location.origin;
-  let sessionId = localStorage.getItem('aetheric_session') || crypto.randomUUID();
-  localStorage.setItem('aetheric_session', sessionId);
-  let isRecording = false;
-  let recognition = null;
+const API_BASE = window.location.origin;
+let sessionId = localStorage.getItem('aetheric_session') || null;
+let ws = null;
 
-  // ── WebSocket ──
-  let ws = null;
-  function connectWS() {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    ws = new WebSocket(`${protocol}://${window.location.host}/ws`);
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'register', payload: { role: 'user', id: sessionId, name: 'User' } }));
-    };
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'booking_update') {
-        addAIMessage(data.message);
-      }
-    };
-    ws.onclose = () => setTimeout(connectWS, 3000);
-  }
-  connectWS();
-
-  // ── Speech Recognition ──
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = 'en-IN';
-    recognition.onresult = (e) => {
-      let t = '';
-      for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript;
-      document.getElementById('chat-input').value = t;
-      if (e.results[e.resultIndex].isFinal) { stopMic(); sendChat(); }
-    };
-    recognition.onerror = () => stopMic();
-    recognition.onend = () => { if (isRecording) stopMic(); };
-  }
-
-  function toggleMic() { isRecording ? stopMic() : startMic(); }
-  function startMic() {
-    if (!recognition) { alert('Speech not supported'); return; }
-    isRecording = true; recognition.start();
-    document.getElementById('mic-icon').textContent = 'stop';
-    document.getElementById('mic-btn').classList.add('text-red-500');
-  }
-  function stopMic() {
-    isRecording = false; if (recognition) recognition.stop();
-    document.getElementById('mic-icon').textContent = 'mic';
-    document.getElementById('mic-btn').classList.remove('text-red-500');
-  }
-
-  function sendSuggestion(msg) {
-    document.getElementById('initial-suggestions')?.remove();
-    sendMessage(msg);
-  }
-
-  function sendChat() {
-    const input = document.getElementById('chat-input');
-    const msg = input.value.trim();
-    if (!msg) return;
-    input.value = '';
-    sendMessage(msg);
-  }
-
-  async function sendMessage(message) {
-    addUserMessage(message);
-    const typingId = addTypingIndicator();
-
-    try {
-      const res = await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, sessionId, userId: sessionId })
-      });
-      const data = await res.json();
-      removeTypingIndicator(typingId);
-      addAIMessage(data.reply, data.mcpData, data.suggestions);
-    } catch (err) {
-      removeTypingIndicator(typingId);
-      addAIMessage('Sorry, something went wrong. Please try again.', null, []);
+// WebSocket
+function connectWS() {
+  const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${window.location.host}/ws`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'register', payload: { role: 'user', id: 'web_user_' + Date.now() } }));
+    document.getElementById('ws-status').className = 'w-2 h-2 bg-emerald-500 rounded-full';
+    document.getElementById('ws-label').textContent = 'Connected';
+  };
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data.type === 'booking_update') {
+      addMessage('assistant', data.message || 'Booking updated!');
     }
-  }
+  };
+  ws.onclose = () => {
+    document.getElementById('ws-status').className = 'w-2 h-2 bg-red-400 rounded-full';
+    document.getElementById('ws-label').textContent = 'Offline';
+    setTimeout(connectWS, 3000);
+  };
+}
+connectWS();
 
-  function addUserMessage(text) {
-    const container = document.getElementById('chat-container');
-    const div = document.createElement('div');
-    div.className = 'flex flex-col items-end gap-2 ml-12 fade-in';
-    div.innerHTML = `
-      <div class="glass-pane px-6 py-4 rounded-[2rem] rounded-tr-md max-w-md">
-        <p class="text-[15px] font-medium leading-relaxed text-slate-800">${escapeHtml(text)}</p>
-      </div>
-      <span class="text-[10px] font-label text-slate-400 mr-2 uppercase tracking-widest">${getTime()}</span>
-    `;
-    container.appendChild(div);
-    scrollToBottom();
-  }
+async function sendMessage(text) {
+  const input = document.getElementById('chat-input');
+  const message = text || input.value.trim();
+  if (!message) return;
+  input.value = '';
 
-  function addAIMessage(text, mcpData = null, suggestions = []) {
-    const container = document.getElementById('chat-container');
-    const div = document.createElement('div');
-    div.className = 'flex flex-col items-start gap-5 mr-12 fade-in';
+  addMessage('user', message);
+  showTyping();
+  document.getElementById('suggestions').innerHTML = '';
 
-    let mcpHtml = '';
-    if (mcpData && mcpData.success) {
-      if (mcpData.restaurants) {
-        mcpHtml = mcpData.restaurants.map(r => `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2 group transition-all duration-300 hover:shadow-xl">
-            <div class="bg-white/80 rounded-[1.8rem] p-4 flex gap-4 items-center">
-              <div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center text-2xl shrink-0">🍽️</div>
-              <div class="flex-grow">
-                <h3 class="font-headline font-bold text-primary text-sm">${r.name}</h3>
-                <p class="text-xs text-slate-500">${r.cuisine} • ${r.distance} • ⭐ ${r.rating}</p>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      }
-      if (mcpData.workers) {
-        mcpHtml = mcpData.workers.map(w => `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2 group transition-all duration-300 hover:shadow-xl">
-            <div class="bg-white/80 rounded-[1.8rem] p-4 flex gap-4 items-center">
-              <div class="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center text-2xl shrink-0">${w.photo || '👤'}</div>
-              <div class="flex-grow">
-                <h3 class="font-headline font-bold text-primary text-sm">${w.name}</h3>
-                <p class="text-xs text-slate-500">${w.skill} • ${w.rating} • ${w.hourlyRate}</p>
-                <div class="flex gap-1 mt-1">${w.verified === '✅ Verified' ? '<span class="text-[8px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full uppercase">Verified</span>' : ''}</div>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      }
-      if (mcpData.estimates) {
-        mcpHtml = mcpData.estimates.slice(0, 3).map(e => `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2">
-            <div class="bg-white/80 rounded-[1.8rem] p-4 flex gap-4 items-center justify-between">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">${e.icon}</span>
-                <div>
-                  <h3 class="font-headline font-bold text-primary text-sm">${e.rideType}</h3>
-                  <p class="text-xs text-slate-500">ETA: ${e.eta} • ${e.distance}</p>
-                </div>
-              </div>
-              <span class="font-headline font-extrabold text-primary text-lg">${e.fare}</span>
-            </div>
-          </div>
-        `).join('');
-      }
-      if (mcpData.ride) {
-        mcpHtml = `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2">
-            <div class="bg-white/80 rounded-[1.8rem] p-5">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-2xl">🚕</span>
-                <div>
-                  <h3 class="font-headline font-bold text-primary">${mcpData.ride.driver}</h3>
-                  <p class="text-xs text-slate-500">${mcpData.ride.vehicle}</p>
-                </div>
-              </div>
-              <div class="flex justify-between text-sm mt-2">
-                <span class="text-slate-500">Fare: <strong class="text-primary">${mcpData.ride.fare}</strong></span>
-                <span class="text-slate-500">OTP: <strong class="text-primary">${mcpData.ride.otp}</strong></span>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      if (mcpData.order) {
-        mcpHtml = `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2">
-            <div class="bg-white/80 rounded-[1.8rem] p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg">🎉</span>
-                <h3 class="font-headline font-bold text-primary text-sm">Order Confirmed</h3>
-              </div>
-              <p class="text-xs text-slate-500 mb-1">${mcpData.order.restaurant}</p>
-              <p class="text-xs text-slate-600">${mcpData.order.items?.join(', ')}</p>
-              <div class="flex justify-between text-sm mt-3 pt-3 border-t border-slate-100">
-                <span class="text-slate-500">Total: <strong class="text-primary">${mcpData.order.grandTotal}</strong></span>
-                <span class="text-slate-500">ETA: <strong>${mcpData.order.estimatedDelivery}</strong></span>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      if (mcpData.booking) {
-        mcpHtml = `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2">
-            <div class="bg-white/80 rounded-[1.8rem] p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg">📋</span>
-                <h3 class="font-headline font-bold text-primary text-sm">Booking Sent</h3>
-              </div>
-              <p class="text-xs text-slate-600">${mcpData.booking.worker} • ${mcpData.booking.skill}</p>
-              <p class="text-xs text-slate-500 mt-1">${mcpData.booking.service} • ${mcpData.booking.rate}</p>
-              <p class="text-[10px] text-slate-400 mt-2 uppercase tracking-wider">${mcpData.booking.urgency}</p>
-            </div>
-          </div>
-        `;
-      }
-      if (mcpData.recommendations) {
-        mcpHtml = mcpData.recommendations.map(r => `
-          <div class="w-full max-w-md glass-pane p-1.5 rounded-[2rem] mt-2">
-            <div class="bg-white/80 rounded-[1.8rem] p-4 flex gap-4 items-center justify-between">
-              <div>
-                <h3 class="font-headline font-bold text-primary text-sm">${r.item}</h3>
-                <p class="text-xs text-slate-500">${r.restaurant} • ${r.veg}</p>
-              </div>
-              <span class="font-headline font-bold text-primary">${r.price}</span>
-            </div>
-          </div>
-        `).join('');
-      }
-    }
-
-    // Format text
-    const formattedText = (text || '')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br/>');
-
-    let suggestionsHtml = '';
-    if (suggestions && suggestions.length > 0) {
-      suggestionsHtml = `<div class="flex flex-wrap gap-2.5 mt-2">
-        ${suggestions.map(s => `<button onclick="sendSuggestion('${s.replace(/'/g, "\\'")}')" class="px-5 py-2.5 glass-pane rounded-full text-xs font-semibold text-slate-600 hover:bg-white/70 transition-colors">${s}</button>`).join('')}
-      </div>`;
-    }
-
-    div.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg">
-          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
-        </div>
-        <span class="text-[11px] font-headline font-extrabold text-primary tracking-[0.2em] uppercase">Aetheric Intelligence</span>
-      </div>
-      <div class="glass-pane-dark text-white px-7 py-6 rounded-[2.5rem] rounded-tl-md max-w-lg relative overflow-hidden">
-        <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/5 blur-3xl rounded-full"></div>
-        <p class="text-[15px] font-body leading-relaxed relative z-10 opacity-95">${formattedText}</p>
-      </div>
-      ${mcpHtml}
-      ${suggestionsHtml}
-      <span class="text-[10px] font-label text-slate-400 ml-11 uppercase tracking-widest">${getTime()}</span>
-    `;
-    container.appendChild(div);
-    scrollToBottom();
-  }
-
-  function addTypingIndicator() {
-    const container = document.getElementById('chat-container');
-    const id = 'typing-' + Date.now();
-    const div = document.createElement('div');
-    div.id = id;
-    div.className = 'flex flex-col items-start gap-3 mr-12 fade-in';
-    div.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg">
-          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
-        </div>
-        <span class="text-[11px] font-headline font-extrabold text-primary tracking-[0.2em] uppercase">Aetheric Intelligence</span>
-      </div>
-      <div class="glass-pane-dark text-white px-7 py-5 rounded-[2.5rem] rounded-tl-md">
-        <div class="typing-dots flex gap-1">
-          <span class="w-2 h-2 bg-white/60 rounded-full inline-block"></span>
-          <span class="w-2 h-2 bg-white/60 rounded-full inline-block"></span>
-          <span class="w-2 h-2 bg-white/60 rounded-full inline-block"></span>
-        </div>
-      </div>
-    `;
-    container.appendChild(div);
-    scrollToBottom();
-    return id;
-  }
-
-  function removeTypingIndicator(id) {
-    document.getElementById(id)?.remove();
-  }
-
-  function clearChat() {
-    const container = document.getElementById('chat-container');
-    container.innerHTML = '';
-    sessionId = crypto.randomUUID();
+  try {
+    const res = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, sessionId, userId: 'web_user' })
+    });
+    const data = await res.json();
+    sessionId = data.sessionId;
     localStorage.setItem('aetheric_session', sessionId);
-    location.reload();
-  }
+    hideTyping();
 
-  function escapeHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
-  }
+    addMessage('assistant', data.reply || 'I understand. How can I help?');
 
-  function getTime() {
-    return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase();
+    if (data.mcpData) renderMCPCard(data.mcpData, data.intent);
+    if (data.suggestions && data.suggestions.length > 0) renderSuggestions(data.suggestions);
+  } catch (err) {
+    hideTyping();
+    addMessage('assistant', 'Sorry, something went wrong. Please try again.');
   }
+}
 
-  function scrollToBottom() {
-    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+function addMessage(role, content) {
+  const container = document.getElementById('messages');
+  const wrapper = document.createElement('div');
+  wrapper.className = `flex w-full ${role === 'user' ? 'justify-end' : 'justify-start'} fade-in`;
+  
+  const bubble = document.createElement('div');
+  bubble.className = `max-w-[85%] md:max-w-[70%] p-4 text-sm font-medium leading-relaxed shadow-sm ${
+    role === 'user' ? 'user-bubble rounded-t-2xl rounded-bl-2xl' : 'ai-bubble rounded-t-2xl rounded-br-2xl'
+  }`;
+  bubble.innerHTML = formatText(content);
+  wrapper.appendChild(bubble);
+  container.appendChild(wrapper);
+  container.scrollTop = container.scrollHeight;
+}
+
+function formatText(text) {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/_(.*?)_/g, '<em>$1</em>');
+}
+
+function showTyping() {
+  const container = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.id = 'typing-indicator';
+  div.className = 'flex w-full justify-start fade-in';
+  div.innerHTML = '<div class="ai-bubble rounded-2xl rounded-bl-none p-4 shadow-sm flex items-center gap-1.5"><div class="w-2 h-2 bg-white/60 rounded-full typing-dot"></div><div class="w-2 h-2 bg-white/60 rounded-full typing-dot"></div><div class="w-2 h-2 bg-white/60 rounded-full typing-dot"></div></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+function renderMCPCard(data, intent) {
+  if (!data || !data.success) return;
+  const container = document.getElementById('messages');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'flex w-full justify-start fade-in';
+  
+  let html = '<div class="max-w-[90%] md:max-w-[75%] space-y-3">';
+  
+  if (data.restaurants) {
+    data.restaurants.forEach(r => {
+      html += `<div class="mcp-card p-4 rounded-2xl"><div class="flex justify-between items-start"><h4 class="font-bold text-primary">${r.name}</h4><span class="text-xs font-bold text-primary/50">${r.rating}⭐</span></div><p class="text-xs text-primary/60 mt-1">${r.cuisine} · ${r.deliveryTime} · ${r.priceRange}</p>${r.popularItems ? '<div class="flex flex-wrap gap-1.5 mt-2">'+r.popularItems.map(i=>'<span class="text-[10px] bg-white/60 px-2 py-1 rounded-full text-primary/70 font-medium">'+i+'</span>').join('')+'</div>':''}</div>`;
+    });
   }
+  if (data.estimates) {
+    data.estimates.forEach(e => {
+      html += `<div class="mcp-card p-4 rounded-2xl flex items-center gap-4"><span class="text-2xl">${e.icon}</span><div class="flex-1"><h4 class="font-bold text-primary text-sm">${e.rideType}</h4><p class="text-xs text-primary/50">${e.eta} · ${e.distance}</p></div><span class="font-bold text-primary">${e.fare}</span></div>`;
+    });
+  }
+  if (data.ride) {
+    const r = data.ride;
+    html += `<div class="mcp-card p-5 rounded-2xl border-l-4 border-accent"><h4 class="font-bold text-primary mb-2">🚕 Ride Confirmed!</h4><p class="text-sm text-primary/70">Driver: ${r.driver}</p><p class="text-sm text-primary/70">Vehicle: ${r.vehicle}</p><p class="text-sm text-primary/70">OTP: <span class="font-bold text-accent">${r.otp}</span></p><p class="text-sm text-primary/70">Fare: ${r.fare} · ETA: ${r.eta}</p></div>`;
+  }
+  if (data.workers) {
+    data.workers.forEach(w => {
+      html += `<div class="mcp-card p-4 rounded-2xl"><div class="flex items-center gap-3 mb-2"><span class="text-2xl">${w.photo}</span><div><h4 class="font-bold text-primary text-sm">${w.name}</h4><p class="text-xs text-primary/50">${w.skill} · ${w.experience}</p></div></div><div class="flex items-center justify-between"><span class="text-xs font-bold text-primary/60">${w.rating} · ${w.hourlyRate}</span><span class="text-xs ${w.verified.includes('✅') ? 'text-green-600' : 'text-primary/40'} font-bold">${w.verified}</span></div></div>`;
+    });
+  }
+  if (data.recommendations) {
+    data.recommendations.forEach(r => {
+      html += `<div class="mcp-card p-4 rounded-2xl flex items-center justify-between"><div><h4 class="font-bold text-primary text-sm">${r.item}</h4><p class="text-xs text-primary/50">${r.restaurant} · ${r.deliveryTime}</p></div><div class="text-right"><span class="font-bold text-primary">${r.price}</span><span class="text-xs ml-2">${r.veg}</span></div></div>`;
+    });
+  }
+  if (data.order) {
+    const o = data.order;
+    html += `<div class="mcp-card p-5 rounded-2xl border-l-4 border-green-500"><h4 class="font-bold text-primary mb-2">🎉 Order Confirmed!</h4><p class="text-sm text-primary/70">From: ${o.restaurant}</p><p class="text-sm text-primary/70">Items: ${Array.isArray(o.items)?o.items.join(', '):o.items}</p><p class="text-sm font-bold text-primary mt-1">Total: ${o.grandTotal}</p><p class="text-xs text-primary/50 mt-1">Delivery: ${o.estimatedDelivery}</p></div>`;
+  }
+  
+  html += '</div>';
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper);
+  container.scrollTop = container.scrollHeight;
+}
+
+function renderSuggestions(suggestions) {
+  const el = document.getElementById('suggestions');
+  el.innerHTML = suggestions.map(s => 
+    `<button onclick="sendMessage('${s.replace(/'/g,"\\'")}')" class="suggestion-chip px-4 py-2 rounded-full text-xs font-bold text-primary/70 hover:bg-white/70 active:scale-95 transition-all">${s}</button>`
+  ).join('');
+}
+
+// Voice
+let recognition;
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { alert('Voice not supported'); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!recognition) recognition = new SR();
+  recognition.lang = 'en-IN';
+  recognition.onresult = (e) => { document.getElementById('chat-input').value = e.results[0][0].transcript; sendMessage(); };
+  recognition.start();
+  document.getElementById('mic-btn')?.classList.add('bg-red-100');
+  recognition.onend = () => document.getElementById('mic-btn')?.classList.remove('bg-red-100');
+}
+
+// Load initial query from URL
+window.addEventListener('load', () => {
+  const q = new URLSearchParams(window.location.search).get('q');
+  if (q) sendMessage(q);
+});
 </script>
 <script src="/particles.js"></script>
 </body>
