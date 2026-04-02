@@ -41,8 +41,8 @@
 
     /* Desktop-specific */
     @media (min-width: 768px) {
-      .glass-orb-container { width:240px;height:240px; }
-      .glass-orb-main { width:180px;height:180px; }
+      .glass-orb-container { width:300px;height:300px; }
+      .glass-orb-main { width:240px;height:240px; }
     }
   </style>
 </head>
@@ -71,17 +71,10 @@
   <div class="max-w-6xl mx-auto">
     
     <!-- Hero Section: Stack on mobile, side-by-side on desktop -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between md:gap-16 md:min-h-[70vh]">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between md:gap-8 md:min-h-[70vh]">
       
-      <!-- Left: Text + Voice -->
+      <!-- Left: Text -->
       <div class="flex flex-col items-center md:items-start md:flex-1 text-center md:text-left">
-        <!-- Orb (visible on mobile, smaller on desktop-left) -->
-        <div class="glass-orb-container mb-12 fade-up" id="orb-container">
-          <div class="orb-glow-layer"></div>
-          <div class="glass-orb-main"></div>
-          <div class="orb-core"></div>
-        </div>
-
         <h1 class="font-headline text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] text-primary leading-[1.05] mb-4 fade-up fade-up-d1">
           Say anything to<br/>Aetheric
         </h1>
@@ -108,6 +101,15 @@
               <span class="material-symbols-outlined">send</span>
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- Center: Orb -->
+      <div class="flex items-center justify-center my-8 md:my-0 fade-up">
+        <div class="glass-orb-container" id="orb-container">
+          <div class="orb-glow-layer"></div>
+          <div class="glass-orb-main"></div>
+          <div class="orb-core"></div>
         </div>
       </div>
 
