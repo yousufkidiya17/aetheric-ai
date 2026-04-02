@@ -1,0 +1,214 @@
+[
+  {
+    "name": "msitarzewski/agency-agents",
+    "description": "A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.",
+    "stars": 68262,
+    "url": "https://github.com/msitarzewski/agency-agents",
+    "topics": [],
+    "language": "Shell"
+  },
+  {
+    "name": "paperclipai/paperclip",
+    "description": "Open-source orchestration for zero-human companies",
+    "stars": 43910,
+    "url": "https://github.com/paperclipai/paperclip",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "paperclipai/companies",
+    "description": null,
+    "stars": 241,
+    "url": "https://github.com/paperclipai/companies",
+    "topics": [],
+    "language": null
+  },
+  {
+    "name": "virattt/dexter",
+    "description": "An autonomous agent for deep financial research",
+    "stars": 20753,
+    "url": "https://github.com/virattt/dexter",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "openclaw/openclaw",
+    "description": "Your own personal AI assistant. Any OS. Any Platform. The lobster way. \ud83e\udd9e ",
+    "stars": 344683,
+    "url": "https://github.com/openclaw/openclaw",
+    "topics": [
+      "ai",
+      "assistant",
+      "crustacean",
+      "molty",
+      "openclaw",
+      "own-your-data",
+      "personal"
+    ],
+    "language": "TypeScript"
+  },
+  {
+    "name": "lightpanda-io/browser",
+    "description": "Lightpanda: the headless browser designed for AI and automation",
+    "stars": 26550,
+    "url": "https://github.com/lightpanda-io/browser",
+    "topics": [
+      "browser",
+      "browser-automation",
+      "cdp",
+      "headless",
+      "playwright",
+      "puppeteer",
+      "zig"
+    ],
+    "language": "Zig"
+  },
+  {
+    "name": "agentscope-ai/agentscope",
+    "description": "Build and run agents you can see, understand and trust.",
+    "stars": 22763,
+    "url": "https://github.com/agentscope-ai/agentscope",
+    "topics": [
+      "agent",
+      "chatbot",
+      "large-language-models",
+      "llm",
+      "llm-agent",
+      "mcp",
+      "multi-agent",
+      "multi-modal",
+      "react-agent"
+    ],
+    "language": "Python"
+  },
+  {
+    "name": "agentscope-ai/agentscope-samples",
+    "description": "A collection of ready-to-use Python sample agents built with AgentScope and AgentScope Runtime, covering use cases from CLI tools to full-stack applications.",
+    "stars": 262,
+    "url": "https://github.com/agentscope-ai/agentscope-samples",
+    "topics": [],
+    "language": "Python"
+  },
+  {
+    "name": "anomalyco/opencode",
+    "description": "The open source coding agent.",
+    "stars": 134925,
+    "url": "https://github.com/anomalyco/opencode",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "anomalyco/opencode",
+    "description": "The open source coding agent.",
+    "stars": 134925,
+    "url": "https://github.com/anomalyco/opencode",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "CefBoud/MonClaw",
+    "description": "A minimal Openclaw built using the Opencode SDK",
+    "stars": 79,
+    "url": "https://github.com/CefBoud/MonClaw",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "badrisnarayanan/antigravity-claude-proxy",
+    "description": "Proxy that exposes Antigravity provided claude / gemini models, so we can use them in Claude Code and OpenClaw (Clawdbot)",
+    "stars": 3333,
+    "url": "https://github.com/badrisnarayanan/antigravity-claude-proxy",
+    "topics": [
+      "antigravity",
+      "claude",
+      "claude-ai",
+      "claude-code",
+      "clawdbot",
+      "gemini",
+      "gemini-cli",
+      "openclaw",
+      "proxy"
+    ],
+    "language": "JavaScript"
+  },
+  {
+    "name": "router-for-me/CLIProxyAPI",
+    "description": "Wrap Gemini CLI, Antigravity, ChatGPT Codex, Claude Code, Qwen Code, iFlow as an OpenAI/Gemini/Claude/Codex compatible API service, allowing you to enjoy the free Gemini 2.5 Pro, GPT 5, Claude, Qwen model through API",
+    "stars": 22054,
+    "url": "https://github.com/router-for-me/CLIProxyAPI",
+    "topics": [
+      "antigravity",
+      "claude-code",
+      "cluade",
+      "codex",
+      "gemini",
+      "openai",
+      "qwen3-coder"
+    ],
+    "language": "Go"
+  },
+  {
+    "name": "atharen/openclaw-plugin-opencode",
+    "description": "OpenClaw Plugin - Run OpenCode in Podman/Docker containers using your Pro/Max subscription",
+    "stars": 0,
+    "url": "https://github.com/atharen/openclaw-plugin-opencode",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "happycastle114/oh-my-openclaw",
+    "description": "oh-my-opencode patterns ported to OpenClaw",
+    "stars": 137,
+    "url": "https://github.com/happycastle114/oh-my-openclaw",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "Gen-Verse/OpenClaw-RL",
+    "description": "OpenClaw-RL: Train any agent simply by talking",
+    "stars": 4523,
+    "url": "https://github.com/Gen-Verse/OpenClaw-RL",
+    "topics": [
+      "async",
+      "coding",
+      "grpo",
+      "gui-application",
+      "memory-systems",
+      "on-policy-distillation",
+      "open-claw",
+      "openclaw-skills",
+      "rlhf",
+      "sglang",
+      "skill-learning",
+      "slime",
+      "tinker"
+    ],
+    "language": "Python"
+  },
+  {
+    "name": "modelcontextprotocol/servers",
+    "description": "Model Context Protocol Servers",
+    "stars": 82752,
+    "url": "https://github.com/modelcontextprotocol/servers",
+    "topics": [],
+    "language": "TypeScript"
+  },
+  {
+    "name": "ComposioHQ/secure-openclaw",
+    "description": "A personal 24x7 AI assistant like OpenClaw that runs on your messaging platforms. Send a message on WhatsApp, Telegram, Signal, or iMessage and get responses from Claude with full tool access, persistent memory, scheduled reminders, and integrations with 500+ apps.",
+    "stars": 1306,
+    "url": "https://github.com/ComposioHQ/secure-openclaw",
+    "topics": [
+      "clawdbot",
+      "clawdbot-security",
+      "moltbot",
+      "moltbot-skills",
+      "openclaw",
+      "openclaw-plugin",
+      "openclaw-security",
+      "openclaw-skills",
+      "openclawd"
+    ],
+    "language": "JavaScript"
+  }
+]
