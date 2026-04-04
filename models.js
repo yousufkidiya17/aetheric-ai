@@ -57,12 +57,24 @@ const ActiveRideSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const UserSchema = new mongoose.Schema({
+  firebaseUid: { type: String, required: true, unique: true },
+  email: String,
+  displayName: String,
+  photoURL: String,
+  role: { type: String, default: 'user' }, // user, worker, admin
+  createdAt: { type: Date, default: Date.now },
+  lastLogin: { type: Date, default: Date.now }
+});
+
 // --- Models ---
 const Conversation = mongoose.model('Conversation', ConversationSchema);
 const WorkerProfile = mongoose.model('WorkerProfile', WorkerSchema);
 const Booking = mongoose.model('Booking', BookingSchema);
 const ActiveOrder = mongoose.model('ActiveOrder', ActiveOrderSchema);
 const ActiveRide = mongoose.model('ActiveRide', ActiveRideSchema);
+const User = mongoose.model('User', UserSchema);
+
 
 // --- Connection Logic & Seeding ---
 async function connectDB() {
@@ -99,7 +111,5 @@ async function seedData() {
 
 connectDB();
 
-module.exports = { Conversation, WorkerProfile, Booking, ActiveOrder, ActiveRide };
+module.exports = { Conversation, WorkerProfile, Booking, ActiveOrder, ActiveRide, User };
 
-
-module.exports = { Conversation, WorkerProfile, Booking, ActiveOrder, ActiveRide };

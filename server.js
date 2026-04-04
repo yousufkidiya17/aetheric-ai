@@ -12,7 +12,7 @@ const http = require('http');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-const { Conversation, WorkerProfile, Booking, ActiveOrder, ActiveRide } = require('./models');
+const { Conversation, WorkerProfile, Booking, ActiveOrder, ActiveRide, User } = require('./models');
 
 const app = express();
 const server = http.createServer(app);
@@ -504,14 +504,46 @@ app.post('/api/chat', async (req, res) => {
     res.json({ sessionId, ...fallback, timestamp: new Date().toISOString() });
   }
 });
+// --- Phase 2: Auth Sync Logic ---
+app.post('/api/auth/sync', async (req, res) => {
+  try {
+    const { firebaseUid, email, displayName, photoURL } = req.body;
+    if (!firebaseUid) return res.status(400).json({ error: 'Missing UID' });
+
+    let user = await User.findOne({ firebaseUid });
+    if (user) {
+      user.displayName = displayName;
+      user.photoURL = photoURL;
+      user.lastLogin = new Date();
+      await user.save();
+    } else {
+      user = new User({ firebaseUid, email, displayName, photoURL });
+      await user.save();
+    }
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error('Auth Sync Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 // Worker Registration (MongoDB saving)
 app.post('/api/worker/register', async (req, res) => {
-  const { name, skills, experience, hourlyRate, bio, phone, location } = req.body;
+  const { name, skills, experience, hourlyRate, bio, phone, location, firebaseUid } = req.body;
   if (!name || !skills || skills.length === 0) return res.status(400).json({ error: 'Name and skills required' });
 
   const workerId = `wrk_custom_${uuidv4().slice(0, 8)}`;
-  const workerProfile = new WorkerProfile({ id: workerId, name, skills, experience: experience || 'Not specified', hourlyRate: hourlyRate || 0, bio: bio || '', phone: phone || '', location: location || 'Not specified', rating: 0, reviews: 0, completedJobs: 0, verified: false, availability: true });
+  const workerProfile = new WorkerProfile({ 
+    id: workerId, name, skills, 
+    experience: experience || 'Not specified', 
+    hourlyRate: hourlyRate || 0, 
+    bio: bio || '', phone: phone || '', 
+    location: location || 'Not specified', 
+    rating: 0, reviews: 0, completedJobs: 0, 
+    verified: false, availability: true,
+    firebaseUid: firebaseUid || null
+  });
   
   await workerProfile.save();
   res.json({ success: true, message: `Welcome to Aetheric, ${name}!`, worker: workerProfile });
