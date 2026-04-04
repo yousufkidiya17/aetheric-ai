@@ -578,6 +578,7 @@ app.get('/api/worker/:workerId/profile', async (req, res) => {
 });
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/chat', (req, res) => res.sendFile(path.join(__dirname, 'public', 'chat.html')));
 app.get('/worker', (req, res) => res.sendFile(path.join(__dirname, 'public', 'worker-dashboard.html')));
 app.get('/worker/onboarding', (req, res) => res.sendFile(path.join(__dirname, 'public', 'worker-onboarding.html')));

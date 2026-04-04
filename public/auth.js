@@ -33,7 +33,7 @@ async function loginWithGoogle() {
     });
 
     console.log("Logged in and synced:", user.displayName);
-    window.location.reload(); 
+    window.location.href = '/'; 
   } catch (error) {
     console.error("Login failed:", error.message);
     alert("Login failed. Check your connection or try again.");
