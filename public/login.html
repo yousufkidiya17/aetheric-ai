@@ -32,19 +32,21 @@
     @keyframes float { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(10%, 10%) scale(1.1)} }
     .input-field { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
     .input-field:focus { background: rgba(255,255,255,0.12); border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="font-body text-white antialiased">
   <div class="orb"></div>
   <div class="orb-2"></div>
   
-  <div class="glass-login max-w-md w-full mx-6 p-10 md:p-12 rounded-[3.5rem] text-center fade-in">
-    <div class="mb-12">
+  <div class="glass-login max-w-md w-full mx-6 p-10 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] text-center fade-in">
+    <div class="mb-10 md:mb-12">
         <div class="w-16 h-16 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-2xl rotate-3 relative">
              <div class="absolute inset-0 bg-accent/20 blur-xl rounded-full"></div>
              <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent relative z-10"></div>
         </div>
-        <h1 class="font-headline font-black text-4xl tracking-tight mb-3 text-white">Welcome Back</h1>
+        <h1 class="font-headline font-black text-3xl md:text-4xl tracking-tight mb-3 text-white">Welcome Back</h1>
         <p class="text-white/50 text-sm font-medium tracking-wide">Enter the Aetheric Universe</p>
     </div>
 
