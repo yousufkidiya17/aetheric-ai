@@ -25,15 +25,13 @@
     }
   </script>
   <style>
-    body { background: #0A0F1E; min-height:100vh; display:flex; align-items:center; justify-content:center; margin:0; overflow:hidden; }
-    .glass-login { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5); }
+    body { background: #0A0F1E; min-height:100vh; display:flex; align-items:center; justify-content:center; margin:0; overflow:hidden; position: relative; }
+    .glass-login { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5); z-index: 10; opacity: 1 !important; }
     .orb { position:fixed; width:800px; height:800px; border-radius:50%; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); z-index:-1; filter:blur(60px); top: -20%; right: -20%; animation: float 15s infinite alternate ease-in-out; }
     .orb-2 { position:fixed; width:600px; height:600px; border-radius:50%; background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%); z-index:-1; filter:blur(60px); bottom: -10%; left: -10%; animation: float 18s infinite alternate-reverse ease-in-out; }
     @keyframes float { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(10%, 10%) scale(1.1)} }
     .input-field { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
     .input-field:focus { background: rgba(255,255,255,0.12); border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
-    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="font-body text-white antialiased">
