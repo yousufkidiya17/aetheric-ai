@@ -25,43 +25,48 @@
     }
   </script>
   <style>
-    body { background-color:#f1f5f9; background-image:radial-gradient(at 0% 0%,hsla(253,16%,7%,1) 0,transparent 50%),radial-gradient(at 100% 0%,hsla(225,39%,30%,1) 0,transparent 50%); min-height:100vh; display:flex; align-items:center; justify-content:center; }
-    .glass-login { background:rgba(255,255,255,0.05);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(255,255,255,0.1);box-shadow:0 30px 100px rgba(0,0,0,0.5); }
-    .orb { position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.2) 0%,transparent 70%);z-index:-1;filter:blur(40px);animation:float 20s infinite alternate ease-in-out; }
-    @keyframes float { 0%{transform:translate(-10%,-10%) scale(1)} 100%{transform:translate(20%,20%) scale(1.2)} }
+    body { background: #0A0F1E; min-height:100vh; display:flex; align-items:center; justify-content:center; margin:0; overflow:hidden; }
+    .glass-login { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5); }
+    .orb { position:fixed; width:800px; height:800px; border-radius:50%; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); z-index:-1; filter:blur(60px); top: -20%; right: -20%; animation: float 15s infinite alternate ease-in-out; }
+    .orb-2 { position:fixed; width:600px; height:600px; border-radius:50%; background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%); z-index:-1; filter:blur(60px); bottom: -10%; left: -10%; animation: float 18s infinite alternate-reverse ease-in-out; }
+    @keyframes float { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(10%, 10%) scale(1.1)} }
+    .input-field { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s ease; }
+    .input-field:focus { background: rgba(255,255,255,0.12); border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
   </style>
 </head>
 <body class="font-body text-white antialiased">
   <div class="orb"></div>
+  <div class="orb-2"></div>
   
-  <div class="glass-login max-w-md w-full mx-6 p-10 rounded-[3rem] text-center fade-in">
-    <div class="mb-10">
-        <div class="w-16 h-16 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-2xl rotate-3">
-             <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent"></div>
+  <div class="glass-login max-w-md w-full mx-6 p-10 md:p-12 rounded-[3.5rem] text-center fade-in">
+    <div class="mb-12">
+        <div class="w-16 h-16 bg-white rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-2xl rotate-3 relative">
+             <div class="absolute inset-0 bg-accent/20 blur-xl rounded-full"></div>
+             <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent relative z-10"></div>
         </div>
-        <h1 class="font-headline font-extrabold text-4xl tracking-tight mb-3">Welcome Back</h1>
-        <p class="text-white/40 text-sm font-medium">Access your global AI service dashboard</p>
+        <h1 class="font-headline font-black text-4xl tracking-tight mb-3 text-white">Welcome Back</h1>
+        <p class="text-white/50 text-sm font-medium tracking-wide">Enter the Aetheric Universe</p>
     </div>
 
     <!-- Google Login -->
-    <button onclick="loginWithGoogle()" class="w-full py-4 px-6 rounded-2xl bg-white text-primary font-bold shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4 mb-6">
+    <button onclick="loginWithGoogle()" class="w-full py-4.5 px-6 rounded-2xl bg-white text-primary font-extrabold shadow-2xl hover:scale-[1.03] active:scale-[0.97] transition-all flex items-center justify-center gap-4 mb-8">
        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5">
-       <span>Continue with Google</span>
+       <span class="text-sm">Continue with Google</span>
     </button>
 
-    <div class="flex items-center gap-4 mb-6 opacity-30">
-        <hr class="flex-1 border-white/20">
-        <span class="text-[10px] font-bold uppercase tracking-widest">Or use phone</span>
-        <hr class="flex-1 border-white/20">
+    <div class="flex items-center gap-4 mb-8">
+        <hr class="flex-1 border-white/10">
+        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">OR USE PHONE</span>
+        <hr class="flex-1 border-white/10">
     </div>
 
-    <!-- Phone Login Mock (Placeholder for simplicity) -->
+    <!-- Phone Login -->
     <div class="space-y-4">
-        <div class="relative">
-            <span class="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-white/30">phone</span>
-            <input type="tel" placeholder="+91 00000 00000" class="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent/40 focus:border-accent/40 transition-all">
+        <div class="relative group">
+            <span class="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-white/30 group-focus-within:text-accent transition-colors">phone</span>
+            <input type="tel" placeholder="+91 XXXX XXXX" class="w-full pl-14 pr-6 py-4.5 rounded-2xl input-field text-sm font-bold placeholder:text-white/20 outline-none">
         </div>
-        <button class="w-full py-4 px-6 rounded-2xl bg-white/10 text-white/60 font-bold border border-white/10 hover:bg-white/20 transition-all">
+        <button class="w-full py-4.5 px-6 rounded-2xl bg-white/5 text-white/80 font-bold border border-white/10 hover:bg-white/10 transition-all text-sm">
             Get OTP
         </button>
     </div>
