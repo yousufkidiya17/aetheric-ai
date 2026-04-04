@@ -7,6 +7,20 @@
     "start": "node server.js",
     "dev": "node server.js"
   },
+  "keywords": [
+    "ai",
+    "marketplace",
+    "food-ordering",
+    "ride-booking",
+    "workers",
+    "mistral"
+  ],
+  "author": "Yousef Kidiya",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yousufkidiya17/aetheric-ai.git"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
