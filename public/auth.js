@@ -16,12 +16,19 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 // Auth Logic
 async function loginWithGoogle() {
+  const btn = event?.currentTarget || document.querySelector('.login-trigger');
+  const originalHtml = btn ? btn.innerHTML : '';
+  
   try {
+    if (btn) btn.innerHTML = '<span class="animate-spin material-symbols-outlined">sync</span> <span>Connecting...</span>';
+    
     console.log("Starting Firebase login...");
     const result = await auth.signInWithPopup(provider);
     const user = result.user;
     console.log("Firebase login success:", user.displayName);
     
+    if (btn) btn.innerHTML = '<span>Perfect! Syncing...</span>';
+
     // Sync with MongoDB
     try {
         const res = await fetch('/api/auth/sync', {
@@ -34,17 +41,20 @@ async function loginWithGoogle() {
             photoURL: user.photoURL
           })
         });
-        if (!res.ok) throw new Error("Database sync failed");
-        console.log("MongoDB sync success");
+        if (!res.ok) console.warn("Database sync delayed or failed, but login is fine.");
     } catch (dbError) {
         console.error("Database sync error:", dbError.message);
-        // We still let them login since Firebase worked
     }
 
     window.location.href = '/'; 
   } catch (error) {
-    console.error("Login Error Details:", error);
-    alert("Login Error: " + error.message);
+    if (btn) btn.innerHTML = originalHtml;
+    console.error("Login Error:", error);
+    if (error.code === 'auth/unauthorized-domain') {
+        alert("Domain Not Authorized: Please add 'aetheric-ai.onrender.com' to Firebase -> Auth -> Settings -> Authorized Domains.");
+    } else {
+        alert("Login Error: " + error.message);
+    }
   }
 }
 
