@@ -59,8 +59,13 @@ auth.onAuthStateChanged((user) => {
     userProfiles.forEach(p => p.classList.remove('hidden'));
     userNames.forEach(n => n.innerText = user.displayName.split(' ')[0]);
     userPhotos.forEach(p => {
-        if(p.tagName === 'IMG') p.src = user.photoURL;
-        else p.innerText = user.displayName[0];
+        const img = p.querySelector('img');
+        if (img) {
+          img.src = user.photoURL;
+          img.style.display = 'block';
+        } else {
+          p.innerText = user.displayName[0];
+        }
     });
     localStorage.setItem('aetheric_user', JSON.stringify({
         id: user.uid,
