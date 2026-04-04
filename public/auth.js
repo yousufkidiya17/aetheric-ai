@@ -17,26 +17,34 @@ const provider = new firebase.auth.GoogleAuthProvider();
 // Auth Logic
 async function loginWithGoogle() {
   try {
+    console.log("Starting Firebase login...");
     const result = await auth.signInWithPopup(provider);
     const user = result.user;
+    console.log("Firebase login success:", user.displayName);
     
     // Sync with MongoDB
-    await fetch('/api/auth/sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firebaseUid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL
-      })
-    });
+    try {
+        const res = await fetch('/api/auth/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firebaseUid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+          })
+        });
+        if (!res.ok) throw new Error("Database sync failed");
+        console.log("MongoDB sync success");
+    } catch (dbError) {
+        console.error("Database sync error:", dbError.message);
+        // We still let them login since Firebase worked
+    }
 
-    console.log("Logged in and synced:", user.displayName);
     window.location.href = '/'; 
   } catch (error) {
-    console.error("Login failed:", error.message);
-    alert("Login failed. Check your connection or try again.");
+    console.error("Login Error Details:", error);
+    alert("Login Error: " + error.message);
   }
 }
 
